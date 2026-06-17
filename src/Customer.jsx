@@ -9,11 +9,16 @@ export default function Customer() {
   const [searchQuery, setSearchQuery] = useState(''); 
   const [cart, setCart] = useState({}); 
   const [paymentMethod, setPaymentMethod] = useState('COD'); 
-
   const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    axios.get(`${API}/api/products`).then(r => { console.log('RAW RESPONSE:', r.data); return r; })
+    window.scrollTo(0, 0);
+  }, [activeTab]);
+
+  useEffect(() => {
+    axios.get(`${API}/api/products`)
       .then(res => {
         const active = (res.data.data || []).map(p => ({
           id: p.id,
@@ -22,15 +27,41 @@ export default function Customer() {
           price: p.price_gnf,
           img: p.image_url || '',
           status: p.is_active
+
         }))
         setProducts(active)
       })
-      .catch(err => console.log('API error:', err))
-  }, [])
+      .catch(err => console.log('API error:', err));
+    
+    fetchOrders();
+  }, []);
+
   
-  const [orders, setOrders] = useState([
-    { id: 10243, date_en: '06 June 2026', date_fr: '06 Juin 2026', items_en: 'Organic Carrots (1kg)', items_fr: 'Carottes Biologiques (1 kg)', total: 25000, status_en: 'Delivered', status_fr: 'Livré', color: 'bg-green-50 text-green-700', payMethod: 'COD' }
-  ]);
+  const fetchOrders = async () => {
+    setIsLoading(true); // લોડિંગ શરૂ
+    try {
+      const res = await axios.get(`${API}/api/orders`);
+      setOrders(res.data.data || res.data || []);
+    } catch (err) {
+      console.log('Error fetching orders:', err);
+    } finally {
+      setIsLoading(false); // લોડિંગ પૂરું
+    }
+  };
+
+  const getStatusColor = (status) => {
+    switch (status?.toLowerCase()) {
+      case 'confirmed': return 'bg-blue-100 text-blue-700';
+      case 'delivered': return 'bg-green-100 text-green-700';
+      case 'cancelled': return 'bg-rose-100 text-rose-700';
+      default: return 'bg-yellow-100 text-yellow-700';
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.reload();
+  };
 
   const t = {
     FR: { 
@@ -94,11 +125,7 @@ export default function Customer() {
   };
 
   const formatCurrency = (amount) => {
-    if (lang === 'FR') {
-      return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' FG';
-    } else {
-      return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' GNF';
-    }
+    return lang === 'FR' ? amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' FG' : amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' GNF';
   };
 
   const handleQtyChange = (id, delta) => {
@@ -124,50 +151,33 @@ export default function Customer() {
 
   const calculateItemTotal = (id, price) => (cart[id] || 0) * price;
   const calculateGrandTotal = () => {
-    return products.reduce((sum, p) => {
-      return sum + (products.find(item => item.id === p.id) ? calculateItemTotal(p.id, p.price) : 0);
-    }, 0);
+    return products.reduce((sum, p) => sum + (cart[p.id] ? calculateItemTotal(p.id, p.price) : 0), 0);
   };
+  
 
-  const getLiveDateString = (currentLang) => {
-    const d = new Date();
-    const day = d.getDate().toString().padStart(2, '0');
-    const year = d.getFullYear();
-    
-    const monthsEN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    const monthsFR = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
-    
-    if (currentLang === 'FR') {
-      return `${day} ${monthsFR[d.getMonth()]} ${year}`;
-    }
-    return `${day} ${monthsEN[d.getMonth()]} ${year}`;
-  };
-
-  const handlePlaceOrder = () => {
+  const handlePlaceOrder = async () => {
     if (Object.keys(cart).length === 0) return;
 
-    const orderedItemsLabels = Object.keys(cart).map(id => {
+    const orderedItems = Object.keys(cart).map(id => {
       const p = products.find(item => item.id === id);
-      return p ? `${lang === 'FR' ? p.name_fr : p.name_en} (${cart[id]}${t[lang].unit})` : '';
-    }).join(', ');
+      return {
+        product_id: id,
+        name: lang === 'FR' ? (p?.name_fr || 'N/A') : (p?.name_en || 'N/A'),
+        qty: cart[id]
+      };
+    });
 
-    const newOrder = {
-      id: Math.floor(10000 + Math.random() * 90000),
-      date_en: getLiveDateString('EN'),
-      date_fr: getLiveDateString('FR'),
-      items_en: orderedItemsLabels,
-      items_fr: orderedItemsLabels,
-      total: calculateGrandTotal(),
-      status_en: 'Pending',
-      status_fr: 'En attente',
-      color: 'bg-amber-50 text-amber-700',
-      payMethod: paymentMethod 
-    };
-
-    setOrders([newOrder, ...orders]);
-    textCart({});
-    alert(t[lang].successAlert);
-    setActiveTab('Orders');
+    const newOrder = { items: orderedItems, total: calculateGrandTotal(), payment_method: paymentMethod, status: 'Pending' };
+    try {
+      await axios.post(`${API}/api/orders`, newOrder);
+      alert(t[lang].successAlert);
+      setCart({});
+      await fetchOrders();
+      setActiveTab('Orders');
+    } catch (err) {
+      console.error('Error placing order:', err);
+      alert('Failed to place order.');
+    }
   };
 
   const filteredProducts = products.filter(p => {
@@ -312,7 +322,10 @@ export default function Customer() {
 
                   <div className="flex justify-between items-center text-xs font-bold text-slate-700 mb-4 px-1">
                     <span>{t[lang].total}</span>
+
                     <span className="text-emerald-600 text-df font-extrabold">{formatCurrency(calculateGrandTotal())}</span>
+=======
+                    <span className="text-emerald-600 text-xs font-extrabold">{formatCurrency(calculateGrandTotal())}</span>
                   </div>
                   <button onClick={handlePlaceOrder} className="w-full bg-[#008751] text-white py-3 rounded-xl font-bold text-[12px] tracking-wider cursor-pointer shadow-md block text-center active:scale-[0.98]">
                     {t[lang].placeOrder}
@@ -323,6 +336,7 @@ export default function Customer() {
           )}
 
           {activeTab === 'Orders' && (
+
             <div className="space-y-3 relative z-10 pointer-events-auto">
               <h2 className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-4 pl-0.5">{t[lang].history}</h2>
               {orders.map(order => (
@@ -347,6 +361,7 @@ export default function Customer() {
           )}
 
           {activeTab === 'Profile' && (
+            
             <div className="space-y-4 relative z-10 pointer-events-auto">
               <h2 className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-3 pl-0.5">{t[lang].profileTitle}</h2>
               <div className="bg-white p-5 rounded-2xl shadow-sm text-center">
@@ -357,7 +372,11 @@ export default function Customer() {
                   <button className="w-full bg-slate-50 text-slate-600 font-semibold py-2 rounded-xl text-[11px] cursor-pointer block">
                     {t[lang].langSettings}
                   </button>
-                  <button className="w-full bg-rose-50 text-rose-600 font-semibold py-2 rounded-xl text-[11px] cursor-pointer block">
+
+                  <button 
+                    onClick={handleLogout} 
+                    className="w-full bg-rose-50 text-rose-600 font-semibold py-2 rounded-xl text-[11px] cursor-pointer block"
+                  >          
                     {t[lang].logout}
                   </button>
                 </div>
@@ -393,4 +412,4 @@ export default function Customer() {
       </div>
     </div>
   );
-}// force redeploy Sun Jun 14 10:22:47 UTC 2026
+}
