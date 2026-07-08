@@ -199,6 +199,7 @@ useEffect(() => {
       .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, fetchData)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'settings' }, fetchData)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'coupons' }, fetchData)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'categories' }, fetchData)
       .subscribe();
 
     return () => {
