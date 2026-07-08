@@ -1194,6 +1194,7 @@ useEffect(() => {
       </div>
       )
     }  
+    {/*  --- આ ભાગ કોમેન્ટ કરી દેવો, જેથી અત્યારે ના દેખાય ---
     {showLocationModal && (
       <div className="fixed inset-0 bg-black/50 z-[9999] flex items-end justify-center">
         {/* આ ડિવ ને નીચેથી રાઉન્ડ અને નાનું બનાવો */}
@@ -1240,6 +1241,7 @@ useEffect(() => {
         </div>
       </div>
     )}
+    --- કોમેન્ટ પૂરી --- */}
     {showProfileModal && (
       <div className="fixed inset-0 bg-black/50 z-[9999] flex items-end justify-center">
         <div className="bg-white w-full rounded-t-3xl p-5 shadow-2xl animate-slide-up">
