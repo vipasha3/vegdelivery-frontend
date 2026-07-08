@@ -19,7 +19,6 @@ export default function Customer() {
   const [offers, setOffers] = useState([]); // આ લાઈન ઉમેરવી ખૂબ જરૂરી છે  
   const [activeTab, setActiveTab] = useState('Home');
   const [searchQuery, setSearchQuery] = useState(''); 
-  const [loading, setLoading] = useState(true);
   const [cart, setCart] = useState({}); 
   const [paymentMethod, setPaymentMethod] = useState('COD'); 
   const [products, setProducts] = useState([]);
@@ -44,6 +43,7 @@ export default function Customer() {
   const [orderDetails, setOrderDetails] = useState({ zone: '', address: '', landmark: '', instructions: '' });
   const [isNewUser, setIsNewUser] = useState(true);
   const [limit, setLimit] = useState(1);
+  const [isAuthLoading, setIsAuthLoading] = useState(true); // નવો સ્ટેટ
 
   useEffect(() => {
     localStorage.setItem('preferred_lang', lang);
@@ -52,11 +52,12 @@ export default function Customer() {
   
   useEffect(() => {
     const savedProfile = localStorage.getItem('customer_profile');
-    if (!savedProfile) {
-      setIsLoggedIn(false);
-    } else {
+    if (savedProfile) {
+      setProfile(JSON.parse(savedProfile));
+      setUserProfile(JSON.parse(savedProfile));
       setIsLoggedIn(true);
     }
+    setIsAuthLoading(false); // લોડિંગ પૂરું થયું
   }, []);
 
   useEffect(() => {
@@ -122,9 +123,7 @@ useEffect(() => {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (products.length > 0) return;
       setIsLoading(true);
-      setLoading(true); // લોડિંગ શરૂ
       try {
         // 1. Categories, Products, Settings (બધું એકસાથે)
         const [
@@ -187,7 +186,7 @@ useEffect(() => {
         console.error("Error:", err.message);
       } finally {
         setIsLoading(false);
-        setLoading(false); // <--- આ લાઇન અત્યારે ખૂટે છે, જે ઉમેરવી પડશે!
+        setIsLoading(false); // <--- આ લાઇન અત્યારે ખૂટે છે, જે ઉમેરવી પડશે!
       }
     };
 
@@ -205,7 +204,7 @@ useEffect(() => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [profile.phone, lang]);
   
   const fetchOrders = async () => {
     if (!profile.phone) return; // Jo login nathi to order na lavo
@@ -666,7 +665,9 @@ useEffect(() => {
     return matchesCategory && matchesSearch;
   });
 
-  
+  if (isAuthLoading) {
+    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+  }
 
   return (
     <div className="flex justify-center min-h-[100dvh] bg-slate-100">
