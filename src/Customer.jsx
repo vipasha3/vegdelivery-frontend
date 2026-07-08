@@ -1194,54 +1194,7 @@ useEffect(() => {
       </div>
       )
     }  
-    {/*  --- આ ભાગ કોમેન્ટ કરી દેવો, જેથી અત્યારે ના દેખાય ---
-    {showLocationModal && (
-      <div className="fixed inset-0 bg-black/50 z-[9999] flex items-end justify-center">
-        {/* આ ડિવ ને નીચેથી રાઉન્ડ અને નાનું બનાવો */}
-        <div className="bg-white w-full rounded-t-3xl p-5 shadow-2xl animate-slide-up">
-          <div className="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-5"></div> {/* ઉપર નાની પટ્ટી */}
-          
-          <h2 className="text-lg font-bold mb-4 text-slate-800">Edit Address</h2>
-          
-          
-
-          <label className="text-[10px] font-bold text-slate-400 uppercase">Full Address</label>
-          <textarea 
-            value={tempProfile.address || ""}
-            className="w-full p-3 mb-6 mt-1 bg-slate-50 border-0 rounded-xl text-sm resize-none h-24"
-            placeholder="Enter address"
-            onChange={(e) => setTempProfile({...tempProfile, address: e.target.value})}
-          />
-
-          <div className="flex gap-3">
-            <button onClick={() => setShowLocationModal(false)} className="flex-1 py-3 rounded-xl font-bold text-slate-600 bg-gray-100">Cancel</button>
-           
-            <button 
-              onClick={() => {
-                
-                const updatedProfile = { 
-                  ...tempProfile, 
-                  zone: 'None'
-                };
-                
-                setUserProfile(updatedProfile);
-                
-                localStorage.setItem('customer_profile', JSON.stringify(updatedProfile));
-                
-                //setUserProfile(updatedProfile);
-
-                setShowProfileModal(false);
-                
-              }}
-              className="flex-1 py-3 rounded-xl font-bold text-white bg-[#008751]"
-            >
-              Save
-            </button>
-          </div>
-        </div>
-      </div>
-    )}
-    --- કોમેન્ટ પૂરી --- */}
+    
     {showProfileModal && (
       <div className="fixed inset-0 bg-black/50 z-[9999] flex items-end justify-center">
         <div className="bg-white w-full rounded-t-3xl p-5 shadow-2xl animate-slide-up">
