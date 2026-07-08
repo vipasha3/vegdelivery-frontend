@@ -276,6 +276,7 @@ useEffect(() => {
       langBtnEn: 'English',
       noOrders: "Aucune commande trouvée.",
       unit: ' kg',
+      hello: "Bonjour,",
       payTitle: 'MODE DE PAIEMENT',
       payCod: 'Espèces à la livraison',
       payMobile: 'Mobile Money / Orange'
@@ -285,6 +286,7 @@ useEffect(() => {
       name: 'Enter your name',
       phone: 'Enter your phone number', 
       signin: 'Sign In',
+      hello: "Hello,",
       editProfile: "Edit Profile",
       contact: "Contact Us on WhatsApp",
       total: "Total",
@@ -364,6 +366,7 @@ useEffect(() => {
       noItems: '无物品详情',
       tabCart: '我的购物车',
       tabOrders: '订单',
+      hello: "你好,",
       tabProfile: '资料',
       emptyCartAlert: '购物车为空或总金额为0。请添加商品。', 
       cartTitle: '我的购物车',
@@ -729,7 +732,7 @@ useEffect(() => {
             </div>
             
             <div className="text-right">
-              <p className="text-[9px] opacity-70">Hello,</p>
+              <p className="text-[9px] opacity-70">{t[lang].hello}</p>
               <p className="text-[11px] font-bold truncate max-w-[100px]">
                 {userProfile.name || 'Guest'}
               </p>
