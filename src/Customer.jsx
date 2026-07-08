@@ -769,7 +769,8 @@ useEffect(() => {
           
           {activeTab === 'Home' && (
             <div className="relative z-10 pointer-events-auto">
-              <div className="sticky top-0 z-50 bg-white -mx-4 px-4 pb-2">
+              <div className="sticky top-0 z-50 bg-white shadow-[0_4px_6px_-2px_rgba(0,0,0,0.05)] pt-2 pb-3 -mx-4 px-4">                
+              
               {/* Offers Section */}
               {offers && offers.length > 0 && (
                 <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 p-4 rounded-2xl mb-4 text-white shadow-lg">
@@ -802,7 +803,7 @@ useEffect(() => {
               )}
 
               {/* Categories */}
-              <div className="flex gap-2 overflow-x-auto pb-2">
+              <div className="flex gap-2 overflow-x-auto pb-1">
                 <button 
                   onClick={() => setSelectedCategory('All')}
                   className={`px-4 py-1 rounded-full text-xs font-bold ${selectedCategory === 'All' ? 'bg-[#008751] text-white' : 'bg-gray-100 text-gray-600'}`}
@@ -823,6 +824,7 @@ useEffect(() => {
                 ))}
               </div>
              </div> 
+
               {/* Products Title */}
               <h2 className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-3.5 pl-0.5">{t[lang].market}</h2>
               
