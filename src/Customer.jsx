@@ -19,6 +19,7 @@ export default function Customer() {
   const [offers, setOffers] = useState([]); // આ લાઈન ઉમેરવી ખૂબ જરૂરી છે  
   const [activeTab, setActiveTab] = useState('Home');
   const [searchQuery, setSearchQuery] = useState(''); 
+  const [loading, setLoading] = useState(true);
   const [cart, setCart] = useState({}); 
   const [paymentMethod, setPaymentMethod] = useState('COD'); 
   const [products, setProducts] = useState([]);
@@ -121,7 +122,9 @@ useEffect(() => {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (products.length > 0) return;
       setIsLoading(true);
+      setLoading(true); // લોડિંગ શરૂ
       try {
         // 1. Categories, Products, Settings (બધું એકસાથે)
         const [
@@ -202,7 +205,7 @@ useEffect(() => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [profile.phone, lang]);
+  }, []);
   
   const fetchOrders = async () => {
     if (!profile.phone) return; // Jo login nathi to order na lavo
