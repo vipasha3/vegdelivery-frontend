@@ -34,7 +34,7 @@ export default function Customer() {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [settings, setSettings] = useState({ minOrder: 0, fee: 0, welcome_offer_limit: 1 });
-  const [isLoggedIn, setIsLoggedIn] = useState(!!userProfile.name); // નામ હોય તો લોગિન
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [couponCode, setCouponCode] = useState(""); // યુઝર જે કોડ ટાઈપ કરશે
@@ -52,8 +52,9 @@ export default function Customer() {
   useEffect(() => {
     const savedProfile = localStorage.getItem('customer_profile');
     if (savedProfile) {
-      setProfile(JSON.parse(savedProfile));
-      //setIsLoggedIn(true);
+      const parsed = JSON.parse(savedProfile);
+      setProfile(parsed);
+      setIsLoggedIn(true); // જો લોકલ સ્ટોરેજમાં નામ હોય તો જ લોગિન સાચું ગણો
     }
   }, []);
 
@@ -687,6 +688,7 @@ export default function Customer() {
               if(profile.name && profile.phone) {
                 localStorage.setItem('customer_profile', JSON.stringify(profile));
                 localStorage.setItem('preferred_lang', lang);
+                setProfile(profile); // આ સ્ટેટ અપડેટ કરશે
                 setIsLoggedIn(true);
               } else {
                 alert(lang === 'FR' ? "Veuillez entrer le nom et le numéro" : lang === 'ZH' ? "请输入姓名和电话" : "Please enter both name and phone number");
