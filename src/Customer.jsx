@@ -662,6 +662,14 @@ useEffect(() => {
     return matchesCategory && matchesSearch;
   });
 
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-white">
+        <h1 className="text-2xl font-bold text-[#008751]">GUINÉE VERTS</h1>
+      </div>
+    );
+  }
+
   return (
     <div className="flex justify-center min-h-[100dvh] bg-slate-100">
       {!isLoggedIn ? (
