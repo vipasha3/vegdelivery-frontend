@@ -24,7 +24,6 @@ export default function Customer() {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState({ 
     name: '', 
     phone: '', 
@@ -185,6 +184,7 @@ useEffect(() => {
         console.error("Error:", err.message);
       } finally {
         setIsLoading(false);
+        setLoading(false); // <--- આ લાઇન અત્યારે ખૂટે છે, જે ઉમેરવી પડશે!
       }
     };
 
@@ -663,13 +663,7 @@ useEffect(() => {
     return matchesCategory && matchesSearch;
   });
 
-  if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-white">
-        <h1 className="text-2xl font-bold text-[#008751]">GUINÉE VERTS</h1>
-      </div>
-    );
-  }
+  
 
   return (
     <div className="flex justify-center min-h-[100dvh] bg-slate-100">
