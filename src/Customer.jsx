@@ -768,8 +768,8 @@ useEffect(() => {
         <div className="flex-1 overflow-y-auto p-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden relative z-10 pointer-events-auto">
           
           {activeTab === 'Home' && (
-            <div className="sticky top-0 z-20 bg-white pb-2">
-              
+            <div className="relative z-10 pointer-events-auto">
+              <div className="sticky top-0 z-50 bg-white -mx-4 px-4 pb-2">
               {/* Offers Section */}
               {offers && offers.length > 0 && (
                 <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 p-4 rounded-2xl mb-4 text-white shadow-lg">
@@ -802,7 +802,7 @@ useEffect(() => {
               )}
 
               {/* Categories */}
-              <div className="flex gap-2 overflow-x-auto pb-4 px-1 bg-white">
+              <div className="flex gap-2 overflow-x-auto pb-2">
                 <button 
                   onClick={() => setSelectedCategory('All')}
                   className={`px-4 py-1 rounded-full text-xs font-bold ${selectedCategory === 'All' ? 'bg-[#008751] text-white' : 'bg-gray-100 text-gray-600'}`}
@@ -822,7 +822,7 @@ useEffect(() => {
                   </button>
                 ))}
               </div>
-              
+             </div> 
               {/* Products Title */}
               <h2 className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-3.5 pl-0.5">{t[lang].market}</h2>
               
