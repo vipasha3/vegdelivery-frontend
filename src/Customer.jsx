@@ -445,9 +445,9 @@ useEffect(() => {
     if (!products || products.length === 0) return 0;
     
     return products.reduce((sum, p) => {
-      // ખાતરી કરો કે ક્વોન્ટિટી અને પ્રાઇસ બંને નંબર છે
+      
       const qty = cart[p.id] || 0;
-      // અહિયાં `p.price` ની જગ્યાએ તમારા ડેટાબેઝ કોલમનું સાચું નામ લખજો (દા.ત. p.price_gnf)
+
       const price = parseFloat(p.price_gnf || p.price) || 0;      
       return sum + (qty * price);
     }, 0);
@@ -460,18 +460,16 @@ useEffect(() => {
     const minOrder = settings.minOrder || 0;
     const fee = settings.fee || 0;
     
-    // જો સબ-ટોટલ મિનિમમ ઓર્ડર કરતા ઓછું હોય તો ડિલિવરી ફી ઉમેરો
     const delivery = subTotal < minOrder ? fee : 0;
     
     let total = subTotal + delivery;
     
-    // કૂપન ડિસ્કાઉન્ટ (જો એપ્લાય કર્યું હોય)
     if (appliedCoupon) {
       const discountAmount = (subTotal * (appliedCoupon.discount_percent || 0)) / 100;
       total = total - discountAmount;
     }
     
-    return Math.max(0, total); // ટોટલ ક્યારેય માઈનસમાં ન જાય
+    return Math.max(0, total); 
   };
 
   const handleApplyCoupon = async () => {
@@ -1216,26 +1214,23 @@ useEffect(() => {
 
           <div className="flex gap-3">
             <button onClick={() => setShowLocationModal(false)} className="flex-1 py-3 rounded-xl font-bold text-slate-600 bg-gray-100">Cancel</button>
-            // આ કોડ તમારા showProfileModal ના Save બટન માં છે, તેને આ રીતે અપડેટ કરો:
+           
             <button 
               onClick={() => {
-                // નવો ડેટા તૈયાર કરો
+                
                 const updatedProfile = { 
                   ...tempProfile, 
                   zone: tempProfile.zone || 'None'
                 };
                 
-                // ૧. સ્ટેટ અપડેટ કરો
                 setUserProfile(updatedProfile);
                 
-                // ૨. લોકલ સ્ટોરેજમાં સેવ કરો
                 localStorage.setItem('customer_profile', JSON.stringify(updatedProfile));
                 
                 setUserProfile(updatedProfile);
-                // ૩. મોડલ બંધ કરો
+
                 setShowProfileModal(false);
                 
-                // ૪. ચેક કરવા માટે લોગ
                 console.log("Updated Profile Saved:", updatedProfile);
               }}
               className="flex-1 py-3 rounded-xl font-bold text-white bg-[#008751]"
@@ -1274,13 +1269,10 @@ useEffect(() => {
                   zone: tempProfile.zone || 'None'
                 };
                 
-                // ૧. ડેટા સ્ટોરેજમાં સેવ કરો
                 localStorage.setItem('customer_profile', JSON.stringify(updatedProfile));
                 
-                // ૨. સ્ટેટ તરત જ અપડેટ કરો
                 setUserProfile(updatedProfile); 
                 
-                // ૩. મોડલ બંધ કરો
                 setShowProfileModal(false);
               }}
               className="flex-1 py-3 rounded-xl font-bold text-white bg-[#008751]"
