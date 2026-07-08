@@ -780,7 +780,8 @@ useEffect(() => {
                         <div key={off.id} className="flex justify-between items-center">
                           <span className="text-xs font-bold">
                             {/* અહીં નામ બતાવવા માટેનું લોજિક ઉમેરો */}
-                            {lang === 'FR' ? off.name_fr : lang === 'ZH' ? off.name_zh : off.name_en} 
+                            {lang === 'FR' ? off.name_fr : lang === 'ZH' ? off.name_zh : off.name_en}
+                            <span className="ml-1 text-emerald-100">({off.discount_percent}% OFF)</span>  
                             <span className="ml-2 font-normal opacity-80">({lang === 'FR' ? 'Code:' : lang === 'ZH' ? '代码:' : 'Code:'} {off.code})</span>
                             
                             {off.type === 'welcome' && limit !== null && (
@@ -894,6 +895,7 @@ useEffect(() => {
                         <div key={off.id} className="mb-2">
                           <p className="text-[10px] text-emerald-600 font-bold">
                             ✨ {lang === 'FR' ? off.name_fr : lang === 'ZH' ? off.name_zh : off.name_en}
+                            <span className="ml-1 text-emerald-800">({off.discount_percent}% OFF)</span> 
                             <span className="ml-2 bg-white px-1 rounded font-bold">({lang === 'FR' ? 'Code:' : lang === 'ZH' ? '代码:' : 'Code:'} {off.code})</span>
                             
                             {off.type === 'welcome' && limit !== null && (
