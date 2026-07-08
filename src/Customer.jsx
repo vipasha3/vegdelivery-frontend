@@ -769,7 +769,7 @@ useEffect(() => {
           
           {activeTab === 'Home' && (
             <div className="relative z-10 pointer-events-auto">
-              <div className="sticky top-0 z-50 bg-white shadow-[0_4px_6px_-2px_rgba(0,0,0,0.05)] pt-2 pb-3 -mx-4 px-4">                
+              <div className="sticky top-0 z-50 bg-white block shadow-[0_4px_6px_-2px_rgba(0,0,0,0.05)] pt-2 pb-3 -mx-4 px-4">
               
               {/* Offers Section */}
               {offers && offers.length > 0 && (
@@ -829,7 +829,7 @@ useEffect(() => {
               <h2 className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-3.5 pl-0.5">{t[lang].market}</h2>
               
               {/* Product Grid */}
-              <div className="grid grid-cols-2 gap-3 w-full">
+              <div className="grid grid-cols-2 gap-3 w-full relative z-10 mt-2">
                 {products && products.length > 0 ? (
                   filteredProducts.map(p => {
                     const currentQty = cart[p.id] || 0;
