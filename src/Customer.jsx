@@ -722,9 +722,18 @@ useEffect(() => {
         
         {/* Header */}
         <div className="bg-[#008751] text-white p-5 pt-8 shrink-0 z-30 relative pointer-events-auto">
-          <div className="flex flex-col mb-4 relative z-30">
-            <h1 className="text-[14px] font-extrabold tracking-wider">{t[lang].title}</h1>
-            <p className="text-[10px] opacity-80 font-medium mt-0.5">{getGreeting()}</p>
+          <div className="flex justify-between items-start mb-4 relative z-30">
+            <div className="flex flex-col">
+              <h1 className="text-[14px] font-extrabold tracking-wider">{t[lang].title}</h1>
+              <p className="text-[10px] opacity-80 font-medium mt-0.5">{getGreeting()}</p>
+            </div>
+            
+            <div className="text-right">
+              <p className="text-[9px] opacity-70">Hello,</p>
+              <p className="text-[11px] font-bold truncate max-w-[100px]">
+                {userProfile.name || 'Guest'}
+              </p>
+            </div>
           </div>
           
           {activeTab === 'Home' && (
