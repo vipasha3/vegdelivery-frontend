@@ -51,10 +51,10 @@ export default function Customer() {
   
   useEffect(() => {
     const savedProfile = localStorage.getItem('customer_profile');
-    if (savedProfile) {
-      const parsed = JSON.parse(savedProfile);
-      setProfile(parsed);
-      setIsLoggedIn(true); // જો લોકલ સ્ટોરેજમાં નામ હોય તો જ લોગિન સાચું ગણો
+    if (!savedProfile) {
+      setIsLoggedIn(false);
+    } else {
+      setIsLoggedIn(true);
     }
   }, []);
 
@@ -1220,18 +1220,17 @@ useEffect(() => {
                 
                 const updatedProfile = { 
                   ...tempProfile, 
-                  zone: tempProfile.zone || 'None'
+                  zone: 'None'
                 };
                 
                 setUserProfile(updatedProfile);
                 
                 localStorage.setItem('customer_profile', JSON.stringify(updatedProfile));
                 
-                setUserProfile(updatedProfile);
+                //setUserProfile(updatedProfile);
 
                 setShowProfileModal(false);
                 
-                console.log("Updated Profile Saved:", updatedProfile);
               }}
               className="flex-1 py-3 rounded-xl font-bold text-white bg-[#008751]"
             >
