@@ -274,6 +274,7 @@ useEffect(() => {
       logout: 'Se déconnecter',
       langBtnFr: 'Français',
       langBtnEn: 'English',
+      noOrders: "Aucune commande trouvée.",
       unit: ' kg',
       payTitle: 'MODE DE PAIEMENT',
       payCod: 'Espèces à la livraison',
@@ -289,6 +290,7 @@ useEffect(() => {
       total: "Total",
       pending: "Pending",
       delivered: "Delivered",
+      noOrders: "No orders found.",
       unlockedFree: "You've unlocked FREE delivery!",
       address: "ADDRESS",
       edit: "Edit",
@@ -334,6 +336,7 @@ useEffect(() => {
       signin: '登录',
       editProfile: "编辑个人资料",   
       contact: "通过WhatsApp联系我们",
+      noOrders: "未找到订单。",
       total: "总计",
       pending: "待处理",
       unlockedFree: "您已解锁免费配送！",
@@ -1000,7 +1003,7 @@ useEffect(() => {
               <h2 className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-4 pl-0.5">{t[lang].history}</h2>
               
               {orders.length === 0 ? (
-                <p className="text-xs text-slate-400 italic text-center py-10">No orders found.</p>
+                <p className="text-xs text-slate-400 italic text-center py-10">{t[lang].noOrders}</p>
               ) : (
                 [...orders]
                   .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
