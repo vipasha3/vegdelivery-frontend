@@ -566,7 +566,10 @@ useEffect(() => {
       const savedProfile = JSON.parse(localStorage.getItem('customer_profile')) || {};
 
       if (!savedProfile.address) {
-          alert("Please set your delivery address first!");
+          const alertMsg = lang === 'FR' ? "Veuillez d'abord définir votre adresse de livraison !" : 
+                   lang === 'ZH' ? "请先设置您的收货地址！" : 
+                   "Please set your delivery address first!";
+          alert(alertMsg);
           return;
       }
 
