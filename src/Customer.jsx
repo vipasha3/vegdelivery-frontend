@@ -59,6 +59,14 @@ export default function Customer() {
   }, []);
 
   useEffect(() => {
+    const savedData = localStorage.getItem('customer_profile');
+    if (savedData) {
+      setProfile(JSON.parse(savedData));
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+  useEffect(() => {
     const checkUsage = async () => {
       if (userProfile?.phone) {
         const { count } = await supabase
@@ -91,6 +99,13 @@ export default function Customer() {
   };
   fetchSettings();
 }, []);
+
+useEffect(() => {
+  const savedData = localStorage.getItem('customer_profile');
+  if (savedData) {
+    setUserProfile(JSON.parse(savedData));
+  }
+}, [showProfileModal]); // જ્યારે મોડલ બંધ થાય, ત્યારે આ ફરીથી ચેક કરશે
 
   // હોમ પેજની અંદર
   useEffect(() => {
@@ -688,7 +703,7 @@ export default function Customer() {
               if(profile.name && profile.phone) {
                 localStorage.setItem('customer_profile', JSON.stringify(profile));
                 localStorage.setItem('preferred_lang', lang);
-                setProfile(profile); // આ સ્ટેટ અપડેટ કરશે
+                setUserProfile(profile);
                 setIsLoggedIn(true);
               } else {
                 alert(lang === 'FR' ? "Veuillez entrer le nom et le numéro" : lang === 'ZH' ? "请输入姓名和电话" : "Please enter both name and phone number");
@@ -1102,6 +1117,7 @@ export default function Customer() {
             <div className="relative z-[100] w-full h-full pointer-events-auto">
               
               {/* 1. યુઝર કાર્ડ (નામ અને પ્રોફાઇલ ફોટો) */}
+              {console.log("Current userProfile state:", userProfile)}
               <div className="bg-white p-5 rounded-2xl shadow-sm text-center relative z-[60]">
                 <div className="w-16 h-16 bg-emerald-50 text-[#008751] font-bold rounded-full flex items-center justify-center text-xl mx-auto mb-3">
                   {userProfile.name ? userProfile.name.charAt(0).toUpperCase() : 'G'}
@@ -1200,15 +1216,27 @@ export default function Customer() {
 
           <div className="flex gap-3">
             <button onClick={() => setShowLocationModal(false)} className="flex-1 py-3 rounded-xl font-bold text-slate-600 bg-gray-100">Cancel</button>
+            // આ કોડ તમારા showProfileModal ના Save બટન માં છે, તેને આ રીતે અપડેટ કરો:
             <button 
               onClick={() => {
+                // નવો ડેટા તૈયાર કરો
                 const updatedProfile = { 
                   ...tempProfile, 
-                  zone: 'None' 
+                  zone: tempProfile.zone || 'None'
                 };
+                
+                // ૧. સ્ટેટ અપડેટ કરો
                 setUserProfile(updatedProfile);
+                
+                // ૨. લોકલ સ્ટોરેજમાં સેવ કરો
                 localStorage.setItem('customer_profile', JSON.stringify(updatedProfile));
-                setShowLocationModal(false);
+                
+                setUserProfile(updatedProfile);
+                // ૩. મોડલ બંધ કરો
+                setShowProfileModal(false);
+                
+                // ૪. ચેક કરવા માટે લોગ
+                console.log("Updated Profile Saved:", updatedProfile);
               }}
               className="flex-1 py-3 rounded-xl font-bold text-white bg-[#008751]"
             >
@@ -1245,8 +1273,14 @@ export default function Customer() {
                   ...tempProfile, 
                   zone: tempProfile.zone || 'None'
                 };
-                setUserProfile(updatedProfile);
+                
+                // ૧. ડેટા સ્ટોરેજમાં સેવ કરો
                 localStorage.setItem('customer_profile', JSON.stringify(updatedProfile));
+                
+                // ૨. સ્ટેટ તરત જ અપડેટ કરો
+                setUserProfile(updatedProfile); 
+                
+                // ૩. મોડલ બંધ કરો
                 setShowProfileModal(false);
               }}
               className="flex-1 py-3 rounded-xl font-bold text-white bg-[#008751]"
