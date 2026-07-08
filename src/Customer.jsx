@@ -24,6 +24,7 @@ export default function Customer() {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState({ 
     name: '', 
     phone: '', 
