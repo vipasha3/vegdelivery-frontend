@@ -44,6 +44,8 @@ export default function Customer() {
   const [isNewUser, setIsNewUser] = useState(true);
   const [limit, setLimit] = useState(1);
   const [isAuthLoading, setIsAuthLoading] = useState(true); // નવો સ્ટેટ
+  const [isEditing, setIsEditing] = useState(false);
+  const [tempAddress, setTempAddress] = useState(userProfile?.address || "");
 
   useEffect(() => {
     localStorage.setItem('preferred_lang', lang);
@@ -282,12 +284,14 @@ useEffect(() => {
       unit: ' kg',
       hello: "Bonjour,",
       payTitle: 'MODE DE PAIEMENT',
+      edit: "MODIFIER", save: "ENREGISTRER",
       payCod: 'Espèces à la livraison',
       payMobile: 'Mobile Money / Orange'
     },
     EN: { 
       welcome: 'Welcome',
       name: 'Enter your name',
+      edit: "EDIT", save: "SAVE",
       phone: 'Enter your phone number', 
       signin: 'Sign In',
       hello: "Hello,",
@@ -345,6 +349,7 @@ useEffect(() => {
       noOrders: "未找到订单。",
       total: "总计",
       pending: "待处理",
+      edit: "编辑", save: "保存",
       unlockedFree: "您已解锁免费配送！",
       address: "地址",
       edit: "编辑",
@@ -764,49 +769,46 @@ useEffect(() => {
           )}
         </div>
 
-        {/* Scrollable Content View */}
-        <div className="flex-1 overflow-y-auto p-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden relative z-10 pointer-events-auto">
-          
+        <div className="flex-1 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden relative z-10 pointer-events-auto bg-[#f8fafc]">
+  
           {activeTab === 'Home' && (
             <div className="relative z-10 pointer-events-auto">
-              <div className="sticky top-0 z-50 bg-white block shadow-[0_4px_6px_-2px_rgba(0,0,0,0.05)] pt-2 pb-3 -mx-4 px-4">
-              
-              {/* Offers Section */}
-              {offers && offers.length > 0 && (
-                <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 p-4 rounded-2xl mb-4 text-white shadow-lg">
-                  <p className="text-[10px] font-bold uppercase tracking-widest opacity-90 mb-1">
-                    🔥 {lang === 'FR' ? 'Offre Spéciale' : lang === 'ZH' ? '特别优惠' : 'Special Offer'}
-                  </p>
-                  {/* Home સેક્શનમાં આ બદલો */}
-                  <div className="flex flex-col gap-1">
-                    {offers.filter(off => off.type === 'welcome' ? usageCount < (limit || 1) : true)
-                      .map((off) => (
-                        <div key={off.id} className="flex justify-between items-center">
-                          <span className="text-xs font-bold">
-                            {/* અહીં નામ બતાવવા માટેનું લોજિક ઉમેરો */}
-                            {lang === 'FR' ? off.name_fr : lang === 'ZH' ? off.name_zh : off.name_en}
-                            <span className="ml-1 text-emerald-100">({off.discount_percent}% OFF)</span>  
-                            <span className="ml-2 font-normal opacity-80">({lang === 'FR' ? 'Code:' : lang === 'ZH' ? '代码:' : 'Code:'} {off.code})</span>
-                            
-                            {off.type === 'welcome' && limit !== null && (
-                              <span className="text-emerald-100 ml-1 font-normal opacity-90">
-                                {lang === 'FR' ? `(${Math.max(0, limit - usageCount)} restants)` : 
-                                lang === 'ZH' ? `(剩余 ${Math.max(0, limit - usageCount)} 次)` : 
-                                `(${Math.max(0, limit - usageCount)} uses left)`}
-                              </span>
-                            )}
-                          </span>
-                        </div>
-                    ))}
+                     
+              <div className="sticky top-0 z-50 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.05)] pt-3 pb-3 px-4">
+                
+                {offers && offers.length > 0 && (
+                  <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 p-4 rounded-2xl mb-3 text-white shadow-md">
+                    <p className="text-[10px] font-bold uppercase tracking-widest opacity-90 mb-1">
+                      🔥 {lang === 'FR' ? 'Offre Spéciale' : lang === 'ZH' ? '特别优惠' : 'Special Offer'}
+                    </p>
+                    <div className="flex flex-col gap-1">
+                      {offers.filter(off => off.type === 'welcome' ? usageCount < (limit || 1) : true)
+                        .map((off) => (
+                          <div key={off.id} className="flex justify-between items-center">
+                            <span className="text-xs font-bold">
+                              {lang === 'FR' ? off.name_fr : lang === 'ZH' ? off.name_zh : off.name_en}
+                              <span className="ml-1 text-emerald-100">({off.discount_percent}% OFF)</span>  
+                              <span className="ml-2 font-normal opacity-80">({lang === 'FR' ? 'Code:' : lang === 'ZH' ? '代码:' : 'Code:'} {off.code})</span>
+                              
+                              {off.type === 'welcome' && limit !== null && (
+                                <span className="text-emerald-100 ml-1 font-normal opacity-90">
+                                  {lang === 'FR' ? `(${Math.max(0, limit - usageCount)} restants)` : 
+                                  lang === 'ZH' ? `(剩余 ${Math.max(0, limit - usageCount)} 次)` : 
+                                  `(${Math.max(0, limit - usageCount)} uses left)`}
+                                </span>
+                              )}
+                            </span>
+                          </div>
+                        ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
               {/* Categories */}
-              <div className="flex gap-2 overflow-x-auto pb-1">
+              <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 <button 
                   onClick={() => setSelectedCategory('All')}
-                  className={`px-4 py-1 rounded-full text-xs font-bold ${selectedCategory === 'All' ? 'bg-[#008751] text-white' : 'bg-gray-100 text-gray-600'}`}
+                  className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${selectedCategory === 'All' ? 'bg-[#008751] text-white' : 'bg-gray-100 text-gray-600'}`}
                 >
                   {lang === 'FR' ? 'Tous' : lang === 'ZH' ? '全部' : 'All'}
                 </button>
@@ -815,7 +817,7 @@ useEffect(() => {
                   <button 
                     key={cat.id}
                     onClick={() => setSelectedCategory(cat.id)}
-                    className={`px-4 py-1 rounded-full text-xs font-bold whitespace-nowrap ${selectedCategory === cat.id ? 'bg-[#008751] text-white' : 'bg-gray-100 text-gray-600'}`}
+                    className={`px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all ${selectedCategory === cat.id ? 'bg-[#008751] text-white' : 'bg-gray-100 text-gray-600'}`}
                   >
                     {lang === 'FR' ? (cat.name_fr || cat.name_en) : 
                     lang === 'ZH' ? (cat.name_zh || cat.name_en) : 
@@ -823,18 +825,19 @@ useEffect(() => {
                   </button>
                 ))}
               </div>
-             </div> 
+            </div> 
 
-              {/* Products Title */}
-              <h2 className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-3.5 pl-0.5">{t[lang].market}</h2>
+            <div className="px-4 mt-4 pb-24">
+              <h2 className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-3">{t[lang].market}</h2>
               
               {/* Product Grid */}
-              <div className="grid grid-cols-2 gap-3 w-full bg-white relative z-10">                {products && products.length > 0 ? (
+              <div className="grid grid-cols-2 gap-3 w-full">
+                  {products && products.length > 0 ? (
                   filteredProducts.map(p => {
                     const currentQty = cart[p.id] || 0;
                     return (
-                      <div key={p.id} className="bg-white rounded-2xl p-2.5 shadow-[0_8px_24px_rgba(0,0,0,0.03)] flex flex-col justify-between">
-                        <div className="w-full h-28 rounded-xl mb-2.5 bg-gray-100 overflow-hidden relative">
+                      <div key={p.id} className="bg-white rounded-2xl p-2.5 shadow-[0_4px_12px_rgba(0,0,0,0.05)]">
+                        <div className="w-full h-28 rounded-xl mb-2.5 bg-gray-50 overflow-hidden">
                           <img 
                             src={p.image_url} 
                             alt={lang === 'FR' ? p.name_fr : lang === 'ZH' ? p.name_zh : p.name_en} 
@@ -857,15 +860,15 @@ useEffect(() => {
                         {currentQty === 0 ? (
                           <button 
                             onClick={() => handleQtyChange(p.id, p.step || 0.5)}
-                            className="w-full bg-[#eefbf6] text-[#008751] py-2 rounded-xl text-[11px] font-bold"
+                            className="w-full bg-[#eefbf6] text-[#008751] py-2 rounded-xl text-[11px] font-bold hover:bg-[#dbf7ec] transition-colors"
                           >
                             + {t[lang].add}
                           </button>
                         ) : (
-                          <div className="flex justify-between items-center bg-[#eefbf6] rounded-xl p-1 text-[11px] w-full">
-                            <button onClick={() => handleQtyChange(p.id, -(p.step || 0.5))} className="w-7 h-7 bg-white rounded-lg">-</button>
+                          <div className="flex justify-between items-center bg-[#eefbf6] rounded-xl p-1 text-[11px]">
+                            <button onClick={() => handleQtyChange(p.id, -(p.step || 0.5))} className="w-7 h-7 bg-white rounded-lg shadow-sm font-bold text-slate-600">-</button>
                             <span className="font-bold text-slate-800">{currentQty} {p.unit || 'kg'}</span>
-                            <button onClick={() => handleQtyChange(p.id, p.step || 0.5)} className="w-7 h-7 bg-[#008751] text-white rounded-lg">+</button>
+                            <button onClick={() => handleQtyChange(p.id, p.step || 0.5)} className="w-7 h-7 bg-[#008751] text-white rounded-lg font-bold">+</button>
                           </div>
                         )}
                       </div>
@@ -878,12 +881,13 @@ useEffect(() => {
                 )}
               </div>
             </div>
+            </div>
           )}
 
           {activeTab === 'My Cart' && (
-            <div className="flex flex-col h-full justify-between relative z-10 pointer-events-auto">
-              <div className="flex-1 flex flex-col overflow-y-auto px-1">
-                <h2 className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-4 pl-0.5">{t[lang].cartTitle}</h2>
+            <div className="flex flex-col h-full justify-between relative z-10 pointer-events-auto px-4 pt-4">
+              <div className="flex-1 flex flex-col overflow-y-auto">
+                <h2 className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-4">{t[lang].cartTitle}</h2>
                 
         
                 {/* ૧. ડાયનેમિક ઓફર સેક્શન (કાર્ટ માટે) */}
@@ -926,7 +930,7 @@ useEffect(() => {
                       return (
                         <div key={prodId} className="bg-white p-3 rounded-xl shadow-sm flex justify-between items-center relative z-10">
                           <div className="flex-1 pr-2">
-                            <p className="text-xs font-semibold text-slate-800">{lang === 'FR' ? p.name_fr : p.name_en}</p>
+                            <p className="text-xs font-semibold text-slate-800">{lang === 'FR' ? p.name_fr : lang === 'ZH' ? p.name_zh : p.name_en}</p>
                             <p className="text-[11px] text-emerald-600 font-bold mt-0.5">{formatCurrency(calculateItemTotal(p.id, p.price_gnf))}</p>
                           </div>
                           <div className="flex items-center gap-2 bg-slate-50 p-1 rounded-xl relative z-20">
@@ -980,12 +984,44 @@ useEffect(() => {
                   </div>
 
                   {/* Address Section */}
-                  <div className="bg-gray-50 p-3 rounded-xl mb-3">
-                    <div className="flex justify-between items-center">
+                  <div className="bg-gray-50 p-3 rounded-xl mb-3 border border-slate-100">
+                    <div className="flex justify-between items-center mb-2">
                       <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">{t[lang].address}</p>
-                      <button onClick={() => { setShowLocationModal(true); setShowProfileModal(false); }} className="text-[#008751] font-bold text-[10px]">{t[lang].edit}</button>
+                      
+                      <button 
+                        onClick={() => {
+                          if (isEditing) {
+                            // SAVE કરવા માટે
+                            const updatedProfile = { ...userProfile, address: tempAddress };
+                            setUserProfile(updatedProfile);
+                            localStorage.setItem('customer_profile', JSON.stringify(updatedProfile));
+                            setIsEditing(false);
+                          } else {
+                            // EDIT કરવા માટે
+                            setTempAddress(userProfile?.address || "");
+                            setIsEditing(true);
+                          }
+                        }}
+                        className="text-[#008751] font-bold text-[10px]"
+                      >
+                          {isEditing ? t[lang].save : t[lang].edit}
+                        </button>
+                      
                     </div>
-                    <p className="text-[11px] font-bold text-slate-700 truncate">{userProfile?.address || t[lang].addAddress}</p>
+
+                    {isEditing ? (
+                      <input 
+                        type="text"
+                        value={tempAddress}
+                        onChange={(e) => setTempAddress(e.target.value)}
+                        className="w-full text-[11px] font-bold text-slate-700 bg-white border border-green-200 rounded-lg p-2 outline-none"
+                        autoFocus
+                      />
+                    ) : (
+                      <p className="text-[11px] font-bold text-slate-700 truncate">
+                        {userProfile?.address || t[lang].addAddress}
+                      </p>
+                    )}
                   </div>
 
                   {/* Shipping Status */}
@@ -1025,7 +1061,7 @@ useEffect(() => {
           )}
 
           {activeTab === 'Orders' && (
-            <div className="space-y-3 relative z-10 pointer-events-auto">
+            <div className="space-y-3 relative z-10 pointer-events-auto px-4 pt-4">
               <h2 className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-4 pl-0.5">{t[lang].history}</h2>
               
               {orders.length === 0 ? (
@@ -1141,7 +1177,7 @@ useEffect(() => {
           )}
 
           {activeTab === 'Profile' && (
-            <div className="relative z-[100] w-full h-full pointer-events-auto">
+            <div className="relative z-[100] w-full h-full pointer-events-auto px-4 pt-4 space-y-4">
               
               {/* 1. યુઝર કાર્ડ (નામ અને પ્રોફાઇલ ફોટો) */}
               {console.log("Current userProfile state:", userProfile)}
