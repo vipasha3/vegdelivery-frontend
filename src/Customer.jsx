@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from './supabaseClient'; 
+<<<<<<< HEAD
 import { Trash2 } from 'lucide-react';
+=======
+>>>>>>> 4f82b1e13c75e7c94cbd8310e2ab7697f6318b74
 
 
 export default function Customer() {
@@ -47,8 +50,11 @@ export default function Customer() {
   const [isAuthLoading, setIsAuthLoading] = useState(true); // નવો સ્ટેટ
   const [isEditing, setIsEditing] = useState(false);
   const [tempAddress, setTempAddress] = useState(userProfile?.address || "");
+<<<<<<< HEAD
   const [isPlacing, setIsPlacing] = useState(false);
   const [transactionId, setTransactionId] = useState("");
+=======
+>>>>>>> 4f82b1e13c75e7c94cbd8310e2ab7697f6318b74
 
   useEffect(() => {
     localStorage.setItem('preferred_lang', lang);
@@ -288,7 +294,10 @@ useEffect(() => {
       hello: "Bonjour,",
       payTitle: 'MODE DE PAIEMENT',
       edit: "MODIFIER", save: "ENREGISTRER",
+<<<<<<< HEAD
       setAddress: "Définir l'adresse",
+=======
+>>>>>>> 4f82b1e13c75e7c94cbd8310e2ab7697f6318b74
       payCod: 'Espèces à la livraison',
       payMobile: 'Mobile Money / Orange'
     },
@@ -296,7 +305,10 @@ useEffect(() => {
       welcome: 'Welcome',
       name: 'Enter your name',
       edit: "EDIT", save: "SAVE",
+<<<<<<< HEAD
       setAddress: "Set Address",
+=======
+>>>>>>> 4f82b1e13c75e7c94cbd8310e2ab7697f6318b74
       phone: 'Enter your phone number', 
       signin: 'Sign In',
       hello: "Hello,",
@@ -349,8 +361,12 @@ useEffect(() => {
       name: '请输入您的姓名', 
       phone: '请输入您的电话', 
       signin: '登录',
+<<<<<<< HEAD
       editProfile: "编辑个人资料", 
       setAddress: "设置地址",  
+=======
+      editProfile: "编辑个人资料",   
+>>>>>>> 4f82b1e13c75e7c94cbd8310e2ab7697f6318b74
       contact: "通过WhatsApp联系我们",
       noOrders: "未找到订单。",
       total: "总计",
@@ -433,6 +449,7 @@ useEffect(() => {
   };
 
   const handleQtyChange = (id, delta) => {
+<<<<<<< HEAD
   setCart(prev => {
     const currentQty = prev[id] || 0;
     const newQty = parseFloat((currentQty + delta).toFixed(2)); // આનાથી 0.5 + 0.5 = 1.0 થશે (એરર નહીં આવે)
@@ -447,6 +464,19 @@ useEffect(() => {
     return { ...prev, [id]: newQty };
   });
 };
+=======
+    setCart(prev => {
+      const currentQty = prev[id] || 0;
+      const newQty = currentQty + delta;
+      if (newQty <= 0) {
+        const updated = { ...prev };
+        delete updated[id];
+        return updated;
+      }
+      return { ...prev, [id]: Math.max(1, newQty) };
+    });
+  };
+>>>>>>> 4f82b1e13c75e7c94cbd8310e2ab7697f6318b74
 
   const removeItemFromCart = (id) => {
     setCart(prev => {
@@ -477,6 +507,7 @@ useEffect(() => {
     }, 0);
   };
 
+<<<<<<< HEAD
   const handleUpdateStatus = async (orderId, newStatus) => {
     if (!window.confirm("Are you sure you want to cancel this order?")) return;
 
@@ -497,6 +528,8 @@ useEffect(() => {
     }
   };
 
+=======
+>>>>>>> 4f82b1e13c75e7c94cbd8310e2ab7697f6318b74
   const calculateFinalTotal = () => {
     if (!settings) return calculateSubTotal();
     
@@ -596,6 +629,7 @@ useEffect(() => {
       alert("Coupon removed successfully!");
   };
 
+<<<<<<< HEAD
   const removeFromCart = (id) => {
   setCart(prev => {
     const updated = { ...prev };
@@ -606,6 +640,9 @@ useEffect(() => {
 
   const handlePlaceOrder = async () => {
     if (isLoading) return;
+=======
+  const handlePlaceOrder = async () => {
+>>>>>>> 4f82b1e13c75e7c94cbd8310e2ab7697f6318b74
       const savedProfile = JSON.parse(localStorage.getItem('customer_profile')) || {};
 
       if (!savedProfile.address) {
@@ -615,11 +652,14 @@ useEffect(() => {
           alert(alertMsg);
           return;
       }
+<<<<<<< HEAD
       // ટ્રાન્ઝેક્શન ID વેલિડેશન
       if (!transactionId || transactionId.trim() === "") {
           alert(lang === 'FR' ? "Veuillez entrer l'ID de transaction !" : "Please enter Transaction ID!");
           return;
       }
+=======
+>>>>>>> 4f82b1e13c75e7c94cbd8310e2ab7697f6318b74
 
       setIsLoading(true);
 
@@ -630,7 +670,11 @@ useEffect(() => {
               if (!p) return null;
               return { 
                   product_id: id, 
+<<<<<<< HEAD
                   quantity: Math.floor(cart[id]), 
+=======
+                  quantity: cart[id], 
+>>>>>>> 4f82b1e13c75e7c94cbd8310e2ab7697f6318b74
                   unit_price_gnf: p.price_gnf || p.price 
               };
           }).filter(item => item !== null);
@@ -678,8 +722,12 @@ useEffect(() => {
               delivery_fee: deliveryFee,
               discount_amount: discount,
               discount_percent: appliedCoupon ? appliedCoupon.discount_percent : 0,
+<<<<<<< HEAD
               transaction_id: transactionId
             };
+=======
+          };
+>>>>>>> 4f82b1e13c75e7c94cbd8310e2ab7697f6318b74
 
           const { error: insertError } = await supabase.from('orders').insert([newOrder]);
           if (insertError) throw insertError;
@@ -688,7 +736,10 @@ useEffect(() => {
           setCart({});
           setCouponCode(""); 
           setAppliedCoupon(null);
+<<<<<<< HEAD
           setTransactionId(""); // આ લાઈન ઉમેરો
+=======
+>>>>>>> 4f82b1e13c75e7c94cbd8310e2ab7697f6318b74
           await fetchOrders();
           setActiveTab('Orders');
           
@@ -781,7 +832,11 @@ useEffect(() => {
         </div>
       ) : (
         // --- મુખ્ય એપ (Main App) ---
+<<<<<<< HEAD
         <div className="w-full max-w-[480px] h-[100dvh] bg-[#f8fafc] flex flex-col overflow-hidden relative shadow-lg select-none">
+=======
+        <div className="w-full max-w-[480px] h-[100dvh] bg-[#f8fafc] flex flex-col overflow-hidden relative shadow-lg">
+>>>>>>> 4f82b1e13c75e7c94cbd8310e2ab7697f6318b74
 
         
         {/* Header */}
@@ -818,6 +873,7 @@ useEffect(() => {
   
           {activeTab === 'Home' && (
             <div className="relative z-10 pointer-events-auto">
+<<<<<<< HEAD
               <div className="sticky top-0 z-50 bg-[#f8fafc] pt-3 pb-3 px-4">
                 
                 {/* ૧. ફિલ્ટર કરેલી ઓફર્સ મેળવો */}
@@ -834,13 +890,30 @@ useEffect(() => {
                       </p>
                       <div className="text-[11px] font-bold">
                         {activeOffers.map((off) => (
+=======
+                     
+              <div className="sticky top-0 z-50 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.05)] pt-3 pb-3 px-4">
+                
+                {offers && offers.length > 0 && (
+                  <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 p-4 rounded-2xl mb-3 text-white shadow-md">
+                    <p className="text-[10px] font-bold uppercase tracking-widest opacity-90 mb-1">
+                      🔥 {lang === 'FR' ? 'Offre Spéciale' : lang === 'ZH' ? '特别优惠' : 'Special Offer'}
+                    </p>
+                    <div className="flex flex-col gap-1">
+                      {offers.filter(off => off.type === 'welcome' ? usageCount < (limit || 1) : true)
+                        .map((off) => (
+>>>>>>> 4f82b1e13c75e7c94cbd8310e2ab7697f6318b74
                           <div key={off.id} className="flex justify-between items-center">
                             <span className="text-xs font-bold">
                               {lang === 'FR' ? off.name_fr : lang === 'ZH' ? off.name_zh : off.name_en}
                               <span className="ml-1 text-emerald-100">({off.discount_percent}% OFF)</span>  
+<<<<<<< HEAD
                               <span className="ml-2 font-normal opacity-80">
                                 ({lang === 'FR' ? 'Code:' : lang === 'ZH' ? '代码:' : 'Code:'} {off.code})
                               </span>
+=======
+                              <span className="ml-2 font-normal opacity-80">({lang === 'FR' ? 'Code:' : lang === 'ZH' ? '代码:' : 'Code:'} {off.code})</span>
+>>>>>>> 4f82b1e13c75e7c94cbd8310e2ab7697f6318b74
                               
                               {off.type === 'welcome' && limit !== null && (
                                 <span className="text-emerald-100 ml-1 font-normal opacity-90">
@@ -852,11 +925,17 @@ useEffect(() => {
                             </span>
                           </div>
                         ))}
+<<<<<<< HEAD
                       </div>
                     </div>
                   ) : null; // જો ઓફર ન હોય તો કંઈ જ રેન્ડર નહીં થાય
                 })()}
 
+=======
+                    </div>
+                  </div>
+                )}
+>>>>>>> 4f82b1e13c75e7c94cbd8310e2ab7697f6318b74
 
               {/* Categories */}
               <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -920,6 +999,7 @@ useEffect(() => {
                           </button>
                         ) : (
                           <div className="flex justify-between items-center bg-[#eefbf6] rounded-xl p-1 text-[11px]">
+<<<<<<< HEAD
                           <button 
                             onClick={() => handleQtyChange(p.id, -(p.step || 1))} 
                             className="w-7 h-7 bg-white rounded-lg shadow-sm font-bold text-slate-600"
@@ -936,6 +1016,12 @@ useEffect(() => {
                             +
                           </button>
                         </div>
+=======
+                            <button onClick={() => handleQtyChange(p.id, -(p.step || 0.5))} className="w-7 h-7 bg-white rounded-lg shadow-sm font-bold text-slate-600">-</button>
+                            <span className="font-bold text-slate-800">{currentQty} {p.unit || 'kg'}</span>
+                            <button onClick={() => handleQtyChange(p.id, p.step || 0.5)} className="w-7 h-7 bg-[#008751] text-white rounded-lg font-bold">+</button>
+                          </div>
+>>>>>>> 4f82b1e13c75e7c94cbd8310e2ab7697f6318b74
                         )}
                       </div>
                     );
@@ -951,6 +1037,7 @@ useEffect(() => {
           )}
 
           {activeTab === 'My Cart' && (
+<<<<<<< HEAD
             <div className="flex flex-col h-full overflow-hidden px-4 pt-4">
               {/* Header - થોડું નાનું કર્યું */}
               <h2 className="text-[9px] font-bold text-slate-400 tracking-widest uppercase mb-3 shrink-0">
@@ -1134,6 +1221,183 @@ useEffect(() => {
   </div>
 )}  
 
+=======
+            <div className="flex flex-col h-full justify-between relative z-10 pointer-events-auto px-4 pt-4">
+              <div className="flex-1 flex flex-col overflow-y-auto">
+                <h2 className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-4">{t[lang].cartTitle}</h2>
+                
+        
+                {/* ૧. ડાયનેમિક ઓફર સેક્શન (કાર્ટ માટે) */}
+                {Object.keys(cart || {}).length > 0 && !appliedCoupon && offers && offers.length > 0 && (
+                  <div className="bg-emerald-50 border border-emerald-100 p-3 rounded-lg mb-4 shrink-0">
+                    <p className="text-[9px] text-emerald-800 font-bold uppercase mb-2">
+                      🔥 {lang === 'FR' ? 'Offres Disponibles' : lang === 'ZH' ? '可用优惠' : 'Available Offers'}
+                    </p>
+                    
+                    {/* My Cart સેક્શનમાં આ બદલો */}
+                    {offers.filter(off => off.type === 'welcome' ? usageCount < (limit || 1) : true)
+                      .map((off) => (
+                        <div key={off.id} className="mb-2">
+                          <p className="text-[10px] text-emerald-600 font-bold">
+                            ✨ {lang === 'FR' ? off.name_fr : lang === 'ZH' ? off.name_zh : off.name_en}
+                            <span className="ml-1 text-emerald-800">({off.discount_percent}% OFF)</span> 
+                            <span className="ml-2 bg-white px-1 rounded font-bold">({lang === 'FR' ? 'Code:' : lang === 'ZH' ? '代码:' : 'Code:'} {off.code})</span>
+                            
+                            {off.type === 'welcome' && limit !== null && (
+                              <span className="ml-1 opacity-80">
+                                {lang === 'FR' ? `(${Math.max(0, limit - usageCount)} restants)` : 
+                                lang === 'ZH' ? `(剩余 ${Math.max(0, limit - usageCount)} 次)` : 
+                                `(${Math.max(0, limit - usageCount)} uses left)`}
+                              </span>
+                            )}
+                          </p>
+                        </div>
+                    ))}
+                  </div>
+                )}
+
+                {Object.keys(cart || {}).length === 0 ? (
+                  <p className="text-xs text-slate-400 italic text-center py-12">{t[lang].empty}</p>
+                ) : (
+                  <div className="space-y-2.5">
+                    {Object.keys(cart).map(prodId => {
+                      const p = products?.find(item => item.id === prodId);
+                      const qty = cart[prodId];
+                      if (!p) return null;
+                      return (
+                        <div key={prodId} className="bg-white p-3 rounded-xl shadow-sm flex justify-between items-center relative z-10">
+                          <div className="flex-1 pr-2">
+                            <p className="text-xs font-semibold text-slate-800">{lang === 'FR' ? p.name_fr : lang === 'ZH' ? p.name_zh : p.name_en}</p>
+                            <p className="text-[11px] text-emerald-600 font-bold mt-0.5">{formatCurrency(calculateItemTotal(p.id, p.price_gnf))}</p>
+                          </div>
+                          <div className="flex items-center gap-2 bg-slate-50 p-1 rounded-xl relative z-20">
+                            <button onClick={() => handleQtyChange(p.id, -0.5)} className="w-5 h-5 bg-white text-slate-600 rounded-md flex items-center justify-center text-xs font-bold cursor-pointer shadow-sm">-</button>
+                            <span className="text-[10px] font-bold text-slate-800 min-w-[36px] text-center">{qty}{t[lang].unit}</span>
+                            <button onClick={() => handleQtyChange(p.id, 0.5)} className="w-5 h-5 bg-[#008751] text-white rounded-md flex items-center justify-center text-xs font-bold cursor-pointer shadow-sm">+</button>
+                            <button onClick={() => removeItemFromCart(p.id)} className="ml-1 text-[9px] text-rose-500 bg-rose-50 w-5 h-5 rounded-md font-bold flex items-center justify-center cursor-pointer">✕</button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {Object.keys(cart || {}).length > 0 && (
+                <div className="pt-4 mt-2 pointer-events-auto border-t border-gray-100 bg-white shrink-0">
+                  
+                  {/* Coupon Input Section */}
+                  <div className="mb-3">
+                    {appliedCoupon ? (
+                      <div className="flex justify-between items-center bg-emerald-50 border border-emerald-200 p-2 rounded-lg">
+                        <span className="text-[11px] font-bold text-emerald-800">
+                          {lang === 'FR' ? 'Appliqué' : lang === 'ZH' ? '已应用' : 'Applied'}: {appliedCoupon.code}
+                        </span>
+                        <button 
+                          onClick={() => {
+                            setAppliedCoupon(null);
+                            setCouponCode('');
+                          }}
+                          className="text-rose-500 font-bold text-[10px] bg-rose-50 px-2 py-1 rounded"
+                        >
+                          {lang === 'FR' ? 'SUPPRIMER' : lang === 'ZH' ? '移除' : 'REMOVE'} ✕
+                        </button>
+                      </div>
+                    ) : (
+                      // જો કૂપન એપ્લાય ન હોય, તો ઇનપુટ બોક્સ બતાવો
+                      <div className="flex gap-2">
+                        <input 
+                          type="text" 
+                          placeholder={lang === 'FR' ? 'Code promo' : lang === 'ZH' ? '优惠券代码' : 'Coupon Code'}
+                          className="flex-1 text-[11px] px-3 py-2 border rounded-lg outline-none"
+                          value={couponCode || ""} 
+                          onChange={(e) => setCouponCode(e.target.value)}
+                        />
+                        <button onClick={handleApplyCoupon} className="bg-slate-800 text-white px-4 py-2 rounded-lg font-bold text-[10px]">
+                          {lang === 'FR' ? 'Appliquer' : lang === 'ZH' ? '使用' : 'Apply'}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Address Section */}
+                  <div className="bg-gray-50 p-3 rounded-xl mb-3 border border-slate-100">
+                    <div className="flex justify-between items-center mb-2">
+                      <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">{t[lang].address}</p>
+                      
+                      <button 
+                        onClick={() => {
+                          if (isEditing) {
+                            // SAVE કરવા માટે
+                            const updatedProfile = { ...userProfile, address: tempAddress };
+                            setUserProfile(updatedProfile);
+                            localStorage.setItem('customer_profile', JSON.stringify(updatedProfile));
+                            setIsEditing(false);
+                          } else {
+                            // EDIT કરવા માટે
+                            setTempAddress(userProfile?.address || "");
+                            setIsEditing(true);
+                          }
+                        }}
+                        className="text-[#008751] font-bold text-[10px]"
+                      >
+                          {isEditing ? t[lang].save : t[lang].edit}
+                        </button>
+                      
+                    </div>
+
+                    {isEditing ? (
+                      <input 
+                        type="text"
+                        value={tempAddress}
+                        onChange={(e) => setTempAddress(e.target.value)}
+                        className="w-full text-[11px] font-bold text-slate-700 bg-white border border-green-200 rounded-lg p-2 outline-none"
+                        autoFocus
+                      />
+                    ) : (
+                      <p className="text-[11px] font-bold text-slate-700 truncate">
+                        {userProfile?.address || t[lang].addAddress}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Shipping Status */}
+                  {settings && typeof settings.minOrder !== 'undefined' && (
+                    <div className={`text-[10px] px-2 py-1.5 rounded-lg mb-3 text-center font-bold border ${calculateSubTotal() < settings.minOrder ? "text-amber-600 bg-amber-50 border-amber-200" : "text-emerald-600 bg-emerald-50 border-emerald-200"}`}>
+                      {calculateSubTotal() < settings.minOrder ? `${formatCurrency(settings.minOrder - calculateSubTotal())} ${t[lang].moreForFree}` : `${t[lang].unlockedFree || "Free Delivery"} 🎉`}
+                    </div>
+                  )}
+
+                  {/* Total Section */}
+                  <div className="flex justify-between items-center px-1 mb-3">
+                    <div className="text-[11px] font-bold text-slate-500">
+                      <p>{t[lang].subtotal}: {formatCurrency(calculateSubTotal())}</p>
+                      {appliedCoupon?.discount_percent && (
+                        <p className="text-emerald-600 font-bold text-[10px]">
+                          {lang === 'FR' ? 'Remise' : lang === 'ZH' ? '折扣' : 'Discount'}: -{appliedCoupon.discount_percent}%
+                        </p>
+                      )}
+                      <p className={calculateSubTotal() < (settings?.minOrder || 0) ? "text-rose-600" : "text-emerald-600"}>
+                        {lang === 'FR' ? 'Livraison' : lang === 'ZH' ? '配送费' : 'Delivery'}: {calculateSubTotal() < (settings?.minOrder || 0) ? formatCurrency(settings?.fee || 0) : (lang === 'FR' ? 'Gratuit' : lang === 'ZH' ? '免费' : 'Free')}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-[10px] text-slate-400 font-bold uppercase">{t[lang].total}</p>
+                      <p className="text-emerald-600 text-sm font-extrabold">
+                        {formatCurrency(typeof calculateFinalTotal === 'function' ? calculateFinalTotal() : calculateSubTotal())}
+                      </p>
+                    </div>
+                  </div>
+
+                  <button onClick={handlePlaceOrder} className="w-full bg-[#008751] text-white py-3 rounded-xl font-bold text-[12px] shadow-md active:scale-[0.98] transition">
+                    {t[lang].placeOrder}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
+>>>>>>> 4f82b1e13c75e7c94cbd8310e2ab7697f6318b74
           {activeTab === 'Orders' && (
             <div className="space-y-3 relative z-10 pointer-events-auto px-4 pt-4">
               <h2 className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-4 pl-0.5">{t[lang].history}</h2>
@@ -1189,6 +1453,7 @@ useEffect(() => {
                             return parsedItems.map((item, idx) => {
                               const p = products.find(prod => prod.id === item.product_id);
                               const prodName = p ? (lang === 'FR' ? p.name_fr : p.name_en) : 'Product';
+<<<<<<< HEAD
                               const unit = p?.unit || 'kg';
 
                               return (
@@ -1196,6 +1461,12 @@ useEffect(() => {
                                   <span className="text-[11px] text-slate-600">
                                     {item.quantity} {p?.unit || 'kg'} - {prodName}
                                   </span>
+=======
+                              
+                              return (
+                                <div key={idx} className="flex justify-between text-[11px] text-slate-600">
+                                  <span>{item.quantity}{t[lang].unit} - {prodName}</span>
+>>>>>>> 4f82b1e13c75e7c94cbd8310e2ab7697f6318b74
                                   <span>{formatCurrency(item.quantity * (item.unit_price_gnf || 0))}</span>
                                 </div>
                               );
@@ -1230,6 +1501,7 @@ useEffect(() => {
                         )}
                       </div>
 
+<<<<<<< HEAD
                       {order.status === 'PENDING' && (
                         <button 
                           onClick={() => handleUpdateStatus(order.id, 'CANCELLED')}
@@ -1239,6 +1511,8 @@ useEffect(() => {
                         </button>
                       )}
 
+=======
+>>>>>>> 4f82b1e13c75e7c94cbd8310e2ab7697f6318b74
                       <p className="text-xs font-extrabold text-emerald-600 mt-3 pt-2 border-t border-slate-50 text-right">
                         {t[lang].total}: {formatCurrency(
                           (() => {
