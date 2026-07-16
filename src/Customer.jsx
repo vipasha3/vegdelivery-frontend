@@ -264,22 +264,20 @@ useEffect(() => {
       return 'Good Evening';
     }
   };
-  useEffect(() => {
-    window.addEventListener('beforeinstallprompt', (e) => {
+useEffect(() => {
+    // ફંક્શનને useEffect ની અંદર જ ડિફાઇન કર્યું છે
+    const handleBeforeInstall = (e) => {
       e.preventDefault();
+      console.log('Install prompt captured!');
       setDeferredPrompt(e);
-    });
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstall);
+
+    return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
   }, []);
-
-  const handleInstall = () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then((choiceResult) => {
-        setDeferredPrompt(null);
-      });
-    }
-  };
-
+    
+     
   const formatCurrency = (amount) => {
     // ૧. પહેલા કિંમતને નંબર બનાવો
     const val = Number(amount);
@@ -306,6 +304,14 @@ useEffect(() => {
     });
   };
 
+  const handleInstall = () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        setDeferredPrompt(null);
+      });
+    }
+  };
 
   const removeItemFromCart = (id) => {
     setCart(prev => {
