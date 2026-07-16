@@ -41,6 +41,7 @@ export default function Customer() {
   const [tempAddress, setTempAddress] = useState(userProfile?.address || "");
   const [isPlacing, setIsPlacing] = useState(false);
   const [transactionId, setTransactionId] = useState("");
+  const [deferredPrompt, setDeferredPrompt] = useState(null); 
 
   useEffect(() => {
     localStorage.setItem('preferred_lang', lang);
@@ -261,6 +262,21 @@ useEffect(() => {
       if (hour < 12) return 'Good Morning';
       if (hour < 18) return 'Good Afternoon';
       return 'Good Evening';
+    }
+  };
+  useEffect(() => {
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    });
+  }, []);
+
+  const handleInstall = () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        setDeferredPrompt(null);
+      });
     }
   };
 
@@ -657,6 +673,18 @@ useEffect(() => {
 
         <div className="flex-1 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden relative z-10 pointer-events-auto bg-[#f8fafc]">
   
+          {/* Install App Button */}
+          {deferredPrompt && (
+            <div className="px-4 py-2 bg-emerald-50 border-b border-emerald-100 text-center relative z-20 pointer-events-auto">
+              <button 
+                onClick={handleInstall}
+                className="w-full bg-[#008751] text-white py-2 rounded-lg font-bold text-xs shadow-md active:scale-95 transition-transform cursor-pointer"
+              >
+                {lang === 'FR' ? 'Installer l\'application (Rapide & Facile)' : lang === 'ZH' ? '安装应用 (快速便捷)' : 'Install App (Fast & Easy)'}
+              </button>
+            </div>
+          )}
+          
           {activeTab === 'Home' && (
             <div className="relative z-10 pointer-events-auto">
                   <div className="sticky top-0 z-50 bg-[#f8fafc] pt-3 pb-3 px-4">
