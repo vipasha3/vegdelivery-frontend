@@ -693,18 +693,15 @@ useEffect(() => {
           
           {activeTab === 'Home' && (
             <div className="relative z-10 pointer-events-auto">
-                  <div className="sticky top-0 z-50 bg-[#f8fafc] pt-3 pb-3 px-4">
+                <div className="sticky top-0 z-50 bg-[#f8fafc] pt-3 pb-3 px-4">
                 
                 {(() => {
-                  // ૧. પહેલા ફિલ્ટર કરીને લિસ્ટ બનાવો
                   const filteredOffers = offers ? offers.filter(off => 
                     off.type === 'welcome' ? usageCount < (limit || 1) : true
                   ) : [];
 
-                  // ૨. જો ફિલ્ટર કર્યા પછી પણ લિસ્ટ ખાલી હોય, તો કશું જ રેન્ડર ન કરો
                   if (filteredOffers.length === 0) return null;
 
-                  // ૩. જો ઓફર્સ બાકી હોય, તો જ બોક્સ દેખાડો
                   return (
                     <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 p-4 rounded-2xl mb-3 text-white shadow-md">
                       <p className="text-[10px] font-bold uppercase tracking-widest opacity-90 mb-1">
@@ -717,14 +714,6 @@ useEffect(() => {
                               {lang === 'FR' ? off.name_fr : lang === 'ZH' ? off.name_zh : off.name_en}
                               <span className="ml-1 text-emerald-100 font-normal">({off.discount_percent}% OFF)</span> 
                               <span className="font-normal opacity-80">({lang === 'FR' ? 'Code:' : lang === 'ZH' ? '代码:' : 'Code:'} {off.code})</span>
-                              
-                              {off.type === 'welcome' && limit !== null && (
-                                <span className="text-emerald-100 ml-1 font-normal opacity-90">
-                                  {lang === 'FR' ? `(${Math.max(0, limit - usageCount)} restants)` : 
-                                  lang === 'ZH' ? `(剩余 ${Math.max(0, limit - usageCount)} 次)` : 
-                                  `(${Math.max(0, limit - usageCount)} uses left)`}
-                                </span>
-                              )}
                             </span>
                           </div>
                         ))}
@@ -764,6 +753,13 @@ useEffect(() => {
                   {products && products.length > 0 ? (
                   filteredProducts.map(p => {
                     const currentQty = cart[p.id] || 0;
+                    
+                    // જો પ્રોડક્ટનું યુનિટ 'kg' હોય તો જ 0.5 નો સ્ટેપ અને મિનિમમ 1 કિલો રાખવું. 
+                    // જો યુનિટ pcs, bundle કે બીજું હોય તો સ્ટેપ હંમેશા 1 જ રહેશે (જેમ કે પાલક કે બોટલ માટે).
+                    const isKg = p.unit === 'kg';
+                    const itemStep = isKg ? 0.5 : 1;
+                    const minQty = 1;
+
                     return (
                       <div key={p.id} className="bg-white rounded-2xl p-2.5 shadow-[0_4px_12px_rgba(0,0,0,0.05)]">
                         <div className="w-full h-28 rounded-xl mb-2.5 bg-gray-50 overflow-hidden">
@@ -788,15 +784,33 @@ useEffect(() => {
                         {/* Button */}
                         {currentQty === 0 ? (
                           <button 
-                            onClick={() => handleQtyChange(p.id, p.step || 0.5)}
+                            onClick={() => handleQtyChange(p.id, minQty)}
                             className="w-full bg-[#eefbf6] text-[#008751] py-2 rounded-xl text-[11px] font-bold">
                             + {t[lang].add}
                           </button>
                         ) : (
                           <div className="flex justify-between items-center bg-[#eefbf6] rounded-xl p-1 text-[11px]">
-                            <button onClick={() => handleQtyChange(p.id, -(p.step || 0.5))} className="w-7 h-7 bg-white rounded-lg shadow-sm font-bold text-slate-600">-</button>
+                            <button 
+                              onClick={() => {
+                                // જો kg હોય અને 1 કે તેથી ઓછી હોય તો આખી આઇટમ નીકળી જાય, નહીંતર 0.5 ઘટે.
+                                // જો pcs હોય તો સિમ્પલ 1 જ ઘટે.
+                                if (isKg && currentQty <= 1) {
+                                  handleQtyChange(p.id, -currentQty);
+                                } else {
+                                  handleQtyChange(p.id, -itemStep);
+                                }
+                              }} 
+                              className="w-7 h-7 bg-white rounded-lg shadow-sm font-bold text-slate-600"
+                            >
+                              -
+                            </button>
                             <span className="font-bold text-slate-800">{currentQty} {p.unit || 'pcs'}</span>
-                            <button onClick={() => handleQtyChange(p.id, p.step || 0.5)} className="w-7 h-7 bg-[#008751] text-white rounded-lg font-bold">+</button>
+                            <button 
+                              onClick={() => handleQtyChange(p.id, itemStep)} 
+                              className="w-7 h-7 bg-[#008751] text-white rounded-lg font-bold"
+                            >
+                              +
+                            </button>
                           </div>
                         )}
                       </div>
