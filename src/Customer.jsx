@@ -22,6 +22,7 @@ export default function Customer() {
   const [paymentMethod, setPaymentMethod] = useState('COD'); 
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [orders, setOrders] = useState([]);
   const [profile, setProfile] = useState({name: '', phone: '', zone: '', address: '', landmark: '' });
   const [categories, setCategories] = useState([]);
@@ -471,6 +472,8 @@ useEffect(() => {
   };
 
   const handlePlaceOrder = async () => {
+
+      if (isLoading) return;
       const savedProfile = JSON.parse(localStorage.getItem('customer_profile')) || {};
 
       if (!savedProfile.address) {
@@ -1013,8 +1016,14 @@ useEffect(() => {
                           </details>
 
 
-                  <button onClick={handlePlaceOrder} className="w-full py-3 bg-[#008751] text-white rounded-xl font-bold text-[12px]">
-                    {t[lang].placeOrder}
+                  <button 
+                    onClick={handlePlaceOrder} 
+                    disabled={isLoading}
+                    className={`w-full py-3 rounded-xl font-bold text-[12px] text-white transition-all shadow-md ${
+                      isLoading ? 'bg-emerald-400 cursor-not-allowed' : 'bg-[#008751] hover:bg-emerald-700'
+                    }`}
+                  >
+                    {isLoading ? (lang === 'FR' ? 'Traitement en cours...' : lang === 'ZH' ? '处理中...' : 'Processing...') : t[lang].placeOrder}
                   </button>
                 </div>
               )}
