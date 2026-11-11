@@ -1050,6 +1050,7 @@ useEffect(() => {
     )}
 </div>
 )}
+
           {activeTab === 'Orders' && (
             <div className="space-y-3 relative z-10 pointer-events-auto px-4 pt-4">
               <h2 className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-4 pl-0.5">{t[lang].history}</h2>
