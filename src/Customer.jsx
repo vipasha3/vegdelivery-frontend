@@ -830,231 +830,226 @@ useEffect(() => {
           )}
 
           {activeTab === 'My Cart' && (
-            <div className="flex flex-col h-full overflow-hidden px-4 pt-4">
-                <h2 className="text-[9px] font-bold text-slate-400 tracking-widest uppercase mb-3 shrink-0">{t[lang].cartTitle}</h2>
-                  <div className="flex-1 overflow-y-auto pr-1">
-                    {(() => {
-                      const activeOffers = offers ? offers.filter(off =>
-                            off.type === 'welcome' ? usageCount < (limit || 1) : true
-                          ) : [];
+  <div className="flex flex-col h-full overflow-hidden px-4 pt-4">
+      <h2 className="text-[9px] font-bold text-slate-400 tracking-widest uppercase mb-3 shrink-0">{t[lang].cartTitle}</h2>
+        <div className="flex-1 overflow-y-auto pr-1">
+          {(() => {
+            const activeOffers = offers ? offers.filter(off =>
+                  off.type === 'welcome' ? usageCount < (limit || 1) : true
+                ) : [];
 
-        
-                        return (Object.keys(cart || {}).length > 0 && !appliedCoupon && activeOffers.length > 0) ? (
-                          <details className="mb-4 bg-emerald-50 rounded-lg border border-emerald-100">
-                                      <summary className="text-[10px] text-emerald-800 font-bold p-3 cursor-pointer outline-none">
-                                        🔥 {lang === 'FR' ? 'Offres & Coupons' : lang === 'ZH' ? '优惠与券' : 'Offers & Coupons'}
-                                      </summary>
-                                      <div className="px-3 pb-3">
-                                        {/* કૂપન બોક્સ */}
-                                        <div className="flex gap-2 mb-3">
-                                          <input
-                                            type="text"
-                                            placeholder={lang === 'FR' ? 'Code promo' : lang === 'ZH' ? '优惠券代码' : 'Enter Coupon'}
-                                            className="flex-1 text-[10px] p-2 border rounded-lg outline-none"
-                                            value={couponCode || ""}
-                                            onChange={(e) => setCouponCode(e.target.value)}
-                                          />
-                                          <button onClick={handleApplyCoupon} className="bg-emerald-600 text-white px-3 rounded-lg text-[10px] font-bold">
-                                            {lang === 'FR' ? 'Appliquer' : lang === 'ZH' ? '使用' : 'Apply'}
-                                          </button>
-                                        </div>
+              return (Object.keys(cart || {}).length > 0 && !appliedCoupon && activeOffers.length > 0) ? (
+                <details className="mb-4 bg-emerald-50 rounded-lg border border-emerald-100">
+                            <summary className="text-[10px] text-emerald-800 font-bold p-3 cursor-pointer outline-none">
+                              🔥 {lang === 'FR' ? 'Offres & Coupons' : lang === 'ZH' ? '优惠与券' : 'Offers & Coupons'}
+                            </summary>
+                            <div className="px-3 pb-3">
+                              {/* કૂપન બોક્સ */}
+                              <div className="flex gap-2 mb-3">
+                                <input
+                                  type="text"
+                                  placeholder={lang === 'FR' ? 'Code promo' : lang === 'ZH' ? '优惠券代码' : 'Enter Coupon'}
+                                  className="flex-1 text-[10px] p-2 border rounded-lg outline-none"
+                                  value={couponCode || ""}
+                                  onChange={(e) => setCouponCode(e.target.value)}
+                                />
+                                <button onClick={handleApplyCoupon} className="bg-emerald-600 text-white px-3 rounded-lg text-[10px] font-bold">
+                                  {lang === 'FR' ? 'Appliquer' : lang === 'ZH' ? '使用' : 'Apply'}
+                                </button>
+                              </div>
 
-                                    
-                                    {/* My Cart સેક્શનમાં આ બદલો */}
-                                    {activeOffers.map((off) => (
-                                      <div key={off.id} className="mb-2 text-[10px] text-emerald-700 border-t border-emerald-200 pt-2">
-                                          <p className="text-[10px] text-emerald-600 font-bold">
-                                            ✨ {lang === 'FR' ? off.name_fr : lang === 'ZH' ? off.name_zh : off.name_en}
-                                            <div className="opacity-90">
-                                                      {lang === 'FR' ? 'Réduction' : lang === 'ZH' ? '折扣' : 'Discount'}:
-                                                      <span className="font-bold">{off.discount_percent}% OFF</span> |
-                                                      {lang === 'FR' ? ' Code' : lang === 'ZH' ? ' 代码' : ' Code'}:
-                                                      <span className="font-bold bg-white px-1 rounded mx-1">{off.code}</span>
-                                              </div>
-                                              
-                                            
-                                            {off.type === 'welcome' && limit !== null && (
-                                              <span className="ml-1 opacity-80">
-                                                {lang === 'FR' ? `(${Math.max(0, limit - usageCount)} restants)` : 
-                                                lang === 'ZH' ? `(剩余 ${Math.max(0, limit - usageCount)} 次)` : 
-                                                `(${Math.max(0, limit - usageCount)} uses left)`}
-                                              </span>
-                                            )}
-                                          </p>
-                                        </div>
-                                        ))}
+                          
+                          {/* My Cart સેક્શન (Nested <p> એરર ફિક્સ કરી દીધી છે) */}
+                          {activeOffers.map((off) => (
+                            <div key={off.id} className="mb-2 text-[10px] text-emerald-700 border-t border-emerald-200 pt-2">
+                                <div className="text-[10px] text-emerald-600 font-bold">
+                                  ✨ {lang === 'FR' ? off.name_fr : lang === 'ZH' ? off.name_zh : off.name_en}
+                                  <div className="opacity-90 font-normal">
+                                            {lang === 'FR' ? 'Réduction' : lang === 'ZH' ? '折扣' : 'Discount'}:
+                                            <span className="font-bold">{off.discount_percent}% OFF</span> |
+                                            {lang === 'FR' ? ' Code' : lang === 'ZH' ? ' 代码' : ' Code'}:
+                                            <span className="font-bold bg-white px-1 rounded mx-1">{off.code}</span>
                                     </div>
-                                 </details>
-                              ) : null;
-                          })()}
-
-                {Object.keys(cart || {}).length === 0 ? (
-                  <p className="text-xs text-slate-400 italic text-center py-12">{t[lang].empty}</p>
-                ) : (
-                  <div className="space-y-2.5">
-                    {Object.keys(cart).map(prodId => {
-                      const p = products?.find(item => item.id === prodId);
-                      if (!p) return null;
-                      return (
-                        <div key={prodId} className="bg-white p-3 rounded-xl shadow-sm flex justify-between items-center">
-                          <div>
-                            <p className="text-xs font-semibold">{lang === 'FR' ? p.name_fr : lang === 'ZH' ? p.name_zh : p.name_en}</p>
-                            <p className="text-[11px] text-emerald-600 font-bold ">{formatCurrency(calculateItemTotal(p.id, p.price_gnf))}</p>
+                                    
+                                  {off.type === 'welcome' && limit !== null && (
+                                    <span className="ml-1 opacity-80 block mt-1">
+                                      {lang === 'FR' ? `(${Math.max(0, limit - usageCount)} restants)` : 
+                                      lang === 'ZH' ? `(剩余 ${Math.max(0, limit - usageCount)} 次)` : 
+                                      `(${Math.max(0, limit - usageCount)} uses left)`}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                              ))}
                           </div>
-                          <div className="flex items-center gap-2 bg-slate-50 p-1 rounded-xl0">
-                            <button onClick={() => handleQtyChange(p.id, -(p.step || 1))} className="w-5 h-5 bg-white text-slate-600 rounded-md flex items-center justify-center text-xs font-bold cursor-pointer shadow-sm">-</button>
-                            <span className="text-[10px] font-bold w-6 text-center">{cart[p.id]}</span>
-                            <button onClick={() => handleQtyChange(p.id, p.step || 1)} className="w-5 h-5 bg-[#008751] text-white rounded-md flex items-center justify-center text-xs font-bold cursor-pointer shadow-sm">+</button>
-                            <button onClick={() => removeItemFromCart(p.id)} className="ml-1 text-[9px] text-rose-500 bg-rose-50 w-5 h-5 rounded-md font-bold flex items-center justify-center cursor-pointer">✕</button>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
+                       </details>
+                    ) : null;
+                })()}
 
-              {Object.keys(cart || {}).length > 0 && (
-                <div className="bg-white border-t border-slate-100 pt-3 pb-4 shrink-0">
-                    <details className="mb-3">
-                      <summary className="text-[10px] font-bold text-slate-500 uppercase cursor-pointer mb-2">
-                              ⚙️ {lang === 'FR' ? 'Détails de commande (Adresse, Paiement)' : lang === 'ZH' ? '结账详情 (地址, 付款)' : 'Checkout Details (Address, Payment)'}
-                      </summary>
-
-                  {/* Address Section */}
-                  <div className="bg-gray-50 p-3 rounded-xl mb-3 border border-slate-100">
-                    <div className="flex justify-between items-center mb-2">
-                      <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">{t[lang].address}</p>
-                      
-                      <button 
-                        onClick={() => {
-                          if (isEditing) {
-                            // SAVE કરવા માટે
-                            const updatedProfile = { ...userProfile, address: tempAddress };
-                            setUserProfile(updatedProfile);
-                            localStorage.setItem('customer_profile', JSON.stringify(updatedProfile));
-                            setIsEditing(false);
-                          } else {
-                            // EDIT કરવા માટે
-                            setTempAddress(userProfile?.address || "");
-                            setIsEditing(true);
-                          }
-                        }}
-                        className="text-[#008751] font-bold text-[10px]"
-                      >
-                          {isEditing ? t[lang].save : t[lang].edit}
-                        </button>
-                      
-                    </div>
-
-                    {isEditing ? (
-                      <input 
-                        type="text"
-                        value={tempAddress}
-                        onChange={(e) => setTempAddress(e.target.value)}
-                        className="w-full text-[11px] font-bold text-slate-700 bg-white border border-green-200 rounded-lg p-2 outline-none"
-                        autoFocus
-                      />
-                    ) : (
-                      <p className="text-[11px] font-bold text-slate-700 truncate">
-                        {userProfile?.address || t[lang].addAddress}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Shipping Status */}
-                  {settings && typeof settings.minOrder !== 'undefined' && (
-                    <div className={`text-[10px] px-2 py-1.5 rounded-lg mb-3 text-center font-bold border ${calculateSubTotal() < settings.minOrder ? "text-amber-600 bg-amber-50 border-amber-200" : "text-emerald-600 bg-emerald-50 border-emerald-200"}`}>
-                      {calculateSubTotal() < settings.minOrder ? `${formatCurrency(settings.minOrder - calculateSubTotal())} ${t[lang].moreForFree}` : `${t[lang].unlockedFree || "Free Delivery"} 🎉`}
-                    </div>
-                  )}
-
-                  {/* Total Section */}
-                  <div className="flex justify-between items-center px-1 mb-3">
-                    <div className="text-[11px] font-bold text-slate-500">
-                      <p>{t[lang].subtotal}: {formatCurrency(calculateSubTotal())}</p>
-                      {appliedCoupon?.discount_percent && (
-                        <p className="text-emerald-600 font-bold text-[10px]">
-                          {lang === 'FR' ? 'Remise' : lang === 'ZH' ? '折扣' : 'Discount'}: -{appliedCoupon.discount_percent}%
-                        </p>
-                      )}
-                      <p className={calculateSubTotal() < (settings?.minOrder || 0) ? "text-rose-600" : "text-emerald-600"}>
-                        {lang === 'FR' ? 'Livraison' : lang === 'ZH' ? '配送费' : 'Delivery'}: {calculateSubTotal() < (settings?.minOrder || 0) ? formatCurrency(settings?.fee || 0) : (lang === 'FR' ? 'Gratuit' : lang === 'ZH' ? '免费' : 'Free')}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-[10px] text-slate-400 font-bold uppercase">{t[lang].total}</p>
-                      <p className="text-emerald-600 text-sm font-extrabold">
-                        {formatCurrency(typeof calculateFinalTotal === 'function' ? calculateFinalTotal() : calculateSubTotal())}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Payment Method Toggle Buttons */}
-                  <div className="mb-2 flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setPaymentMethod && setPaymentMethod('ONLINE')}
-                      className={`flex-1 py-1.5 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${paymentMethod === 'ONLINE' ? 'bg-emerald-50 border-emerald-600 text-emerald-800' : 'bg-gray-50 text-slate-600 border-slate-200'}`}
-                    >
-                      💳 Orange Money
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setPaymentMethod && setPaymentMethod('COD')}
-                      className={`flex-1 py-1.5 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${paymentMethod === 'COD' ? 'bg-emerald-50 border-emerald-600 text-emerald-800' : 'bg-gray-50 text-slate-600 border-slate-200'}`}
-                    >
-                      💵 Cash on Delivery
-                    </button>
-                  </div>
-
-                  {/* Payment Section Box */}
-                  {paymentMethod === 'ONLINE' ? (
-                    <div className="bg-orange-50 p-2 rounded-lg">
-                      <p className="text-[9px] font-bold text-orange-800 mb-1">💳 ORANGE MONEY</p>
-
-                      <p className="text-[10px] text-gray-600 mb-0.5">
-                        {lang === 'FR' ? 'Envoyer le paiement à :' : lang === 'ZH' ? '付款至 :' : 'Send payment to :'}
-                        <a href="tel:*144*1*224620721028#" className="ml-1 underline font-bold text-emerald-700">
-                          +224 620 72 10 28
-                        </a>
-                      </p>
-
-                      <p className="text-[9px] text-orange-600 mt-1 font-bold">
-                        ⚠️ {lang === 'FR' ? 'Attention : Les fausses IDs seront annulées.' : lang === 'ZH' ? '警告：虚假的交易ID将被取消订单。' : 'Warning: Orders with fake IDs will be automatically cancelled.'}
-                      </p>
-
-                      <input
-                        placeholder={lang === 'FR' ? 'ID de transaction' : lang === 'ZH' ? '交易 ID' : 'Enter Transaction ID'}
-                        className="w-full text-[10px] p-1 mt-1 border rounded"
-                        value={transactionId}
-                        onChange={(e) => setTransactionId(e.target.value)}
-                      />
-                    </div>
-                  ) : (
-                    <div className="bg-emerald-50 p-2 rounded-lg border border-emerald-100">
-                      <p className="text-[10px] font-bold text-emerald-800">
-                        💵 {lang === 'FR' ? 'Payez en espèces à la livraison.' : lang === 'ZH' ? '货到付款。' : 'Pay with cash upon delivery.'}
-                      </p>
-                    </div>
-                  )}
-                  </details>
-
-
-                  <button 
-                    onClick={handlePlaceOrder} 
-                    disabled={isLoading}
-                    className={`w-full py-3 rounded-xl font-bold text-[12px] text-white transition-all shadow-md ${
-                      isLoading ? 'bg-emerald-400 cursor-not-allowed' : 'bg-[#008751] hover:bg-emerald-700'
-                    }`}
-                  >
-                    {isLoading ? (lang === 'FR' ? 'Traitement en cours...' : lang === 'ZH' ? '处理中...' : 'Processing...') : t[lang].placeOrder}
-                  </button>
+      {Object.keys(cart || {}).length === 0 ? (
+        <p className="text-xs text-slate-400 italic text-center py-12">{t[lang].empty}</p>
+      ) : (
+        <div className="space-y-2.5">
+          {Object.keys(cart).map(prodId => {
+            const p = products?.find(item => item.id === prodId);
+            if (!p) return null;
+            return (
+              <div key={prodId} className="bg-white p-3 rounded-xl shadow-sm flex justify-between items-center">
+                <div>
+                  <p className="text-xs font-semibold">{lang === 'FR' ? p.name_fr : lang === 'ZH' ? p.name_zh : p.name_en}</p>
+                  <p className="text-[11px] text-emerald-600 font-bold ">{formatCurrency(calculateItemTotal(p.id, p.price_gnf))}</p>
                 </div>
-              )}
-            </div>
-          )}
+                <div className="flex items-center gap-2 bg-slate-50 p-1 rounded-xl">
+                  <button onClick={() => handleQtyChange(p.id, -(p.step || 1))} className="w-5 h-5 bg-white text-slate-600 rounded-md flex items-center justify-center text-xs font-bold cursor-pointer shadow-sm">-</button>
+                  <span className="text-[10px] font-bold w-6 text-center">{cart[p.id]}</span>
+                  <button onClick={() => handleQtyChange(p.id, p.step || 1)} className="w-5 h-5 bg-[#008751] text-white rounded-md flex items-center justify-center text-xs font-bold cursor-pointer shadow-sm">+</button>
+                  <button onClick={() => removeItemFromCart(p.id)} className="ml-1 text-[9px] text-rose-500 bg-rose-50 w-5 h-5 rounded-md font-bold flex items-center justify-center cursor-pointer">✕</button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
 
+    {Object.keys(cart || {}).length > 0 && (
+      <div className="bg-white border-t border-slate-100 pt-3 pb-4 shrink-0">
+          <details className="mb-3">
+            <summary className="text-[10px] font-bold text-slate-500 uppercase cursor-pointer mb-2">
+                    ⚙️ {lang === 'FR' ? 'Détails de commande (Adresse, Paiement)' : lang === 'ZH' ? '结账详情 (地址, 付款)' : 'Checkout Details (Address, Payment)'}
+            </summary>
+
+        {/* Address Section */}
+        <div className="bg-gray-50 p-3 rounded-xl mb-3 border border-slate-100">
+          <div className="flex justify-between items-center mb-2">
+            <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">{t[lang].address}</p>
+            
+            <button 
+              onClick={() => {
+                if (isEditing) {
+                  const updatedProfile = { ...userProfile, address: tempAddress };
+                  setUserProfile(updatedProfile);
+                  localStorage.setItem('customer_profile', JSON.stringify(updatedProfile));
+                  setIsEditing(false);
+                } else {
+                  setTempAddress(userProfile?.address || "");
+                  setIsEditing(true);
+                }
+              }}
+              className="text-[#008751] font-bold text-[10px]"
+            >
+                {isEditing ? t[lang].save : t[lang].edit}
+              </button>
+            
+          </div>
+
+          {isEditing ? (
+            <input 
+              type="text"
+              value={tempAddress}
+              onChange={(e) => setTempAddress(e.target.value)}
+              className="w-full text-[11px] font-bold text-slate-700 bg-white border border-green-200 rounded-lg p-2 outline-none"
+              autoFocus
+            />
+          ) : (
+            <p className="text-[11px] font-bold text-slate-700 truncate">
+              {userProfile?.address || t[lang].addAddress}
+            </p>
+          )}
+        </div>
+
+        {/* Shipping Status */}
+        {settings && typeof settings.minOrder !== 'undefined' && (
+          <div className={`text-[10px] px-2 py-1.5 rounded-lg mb-3 text-center font-bold border ${calculateSubTotal() < settings.minOrder ? "text-amber-600 bg-amber-50 border-amber-200" : "text-emerald-600 bg-emerald-50 border-emerald-200"}`}>
+            {calculateSubTotal() < settings.minOrder ? `${formatCurrency(settings.minOrder - calculateSubTotal())} ${t[lang].moreForFree}` : `${t[lang].unlockedFree || "Free Delivery"} 🎉`}
+          </div>
+        )}
+
+        {/* Total Section */}
+        <div className="flex justify-between items-center px-1 mb-3">
+          <div className="text-[11px] font-bold text-slate-500">
+            <p>{t[lang].subtotal}: {formatCurrency(calculateSubTotal())}</p>
+            {appliedCoupon?.discount_percent && (
+              <p className="text-emerald-600 font-bold text-[10px]">
+                {lang === 'FR' ? 'Remise' : lang === 'ZH' ? '折扣' : 'Discount'}: -{appliedCoupon.discount_percent}%
+              </p>
+            )}
+            <p className={calculateSubTotal() < (settings?.minOrder || 0) ? "text-rose-600" : "text-emerald-600"}>
+              {lang === 'FR' ? 'Livraison' : lang === 'ZH' ? '配送费' : 'Delivery'}: {calculateSubTotal() < (settings?.minOrder || 0) ? formatCurrency(settings?.fee || 0) : (lang === 'FR' ? 'Gratuit' : lang === 'ZH' ? '免费' : 'Free')}
+            </p>
+          </div>
+          <div className="text-right">
+            <p className="text-[10px] text-slate-400 font-bold uppercase">{t[lang].total}</p>
+            <p className="text-emerald-600 text-sm font-extrabold">
+              {formatCurrency(typeof calculateFinalTotal === 'function' ? calculateFinalTotal() : calculateSubTotal())}
+            </p>
+          </div>
+        </div>
+
+        {/* Payment Method Toggle Buttons */}
+        <div className="mb-2 flex gap-2">
+          <button
+            type="button"
+            onClick={() => setPaymentMethod && setPaymentMethod('ONLINE')}
+            className={`flex-1 py-1.5 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${paymentMethod === 'ONLINE' ? 'bg-emerald-50 border-emerald-600 text-emerald-800' : 'bg-gray-50 text-slate-600 border-slate-200'}`}
+          >
+            💳 Orange Money
+          </button>
+          <button
+            type="button"
+            onClick={() => setPaymentMethod && setPaymentMethod('COD')}
+            className={`flex-1 py-1.5 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${paymentMethod === 'COD' ? 'bg-emerald-50 border-emerald-600 text-emerald-800' : 'bg-gray-50 text-slate-600 border-slate-200'}`}
+          >
+            💵 Cash on Delivery
+          </button>
+        </div>
+
+        {/* Payment Section Box */}
+        {paymentMethod === 'ONLINE' ? (
+          <div className="bg-orange-50 p-2 rounded-lg">
+            <p className="text-[9px] font-bold text-orange-800 mb-1">💳 ORANGE MONEY</p>
+
+            <p className="text-[10px] text-gray-600 mb-0.5">
+              {lang === 'FR' ? 'Envoyer le paiement à :' : lang === 'ZH' ? '付款至 :' : 'Send payment to :'}
+              <a href="tel:*144*1*224620721028#" className="ml-1 underline font-bold text-emerald-700">
+                +224 620 72 10 28
+              </a>
+            </p>
+
+            <p className="text-[9px] text-orange-600 mt-1 font-bold">
+              ⚠️ {lang === 'FR' ? 'Attention : Les fausses IDs seront annulées.' : lang === 'ZH' ? '警告：虚假的交易ID将被取消订单。' : 'Warning: Orders with fake IDs will be automatically cancelled.'}
+            </p>
+
+            <input
+              placeholder={lang === 'FR' ? 'ID de transaction' : lang === 'ZH' ? '交易 ID' : 'Enter Transaction ID'}
+              className="w-full text-[10px] p-1 mt-1 border rounded"
+              value={transactionId}
+              onChange={(e) => setTransactionId(e.target.value)}
+            />
+          </div>
+        ) : (
+          <div className="bg-emerald-50 p-2 rounded-lg border border-emerald-100">
+            <p className="text-[10px] font-bold text-emerald-800">
+              💵 {lang === 'FR' ? 'Payez en espèces à la livraison.' : lang === 'ZH' ? '货到付款。' : 'Pay with cash upon delivery.'}
+            </p>
+          </div>
+        )}
+        </details>
+
+
+        <button 
+          onClick={handlePlaceOrder} 
+          disabled={isLoading}
+          className={`w-full py-3 rounded-xl font-bold text-[12px] text-white transition-all shadow-md ${
+            isLoading ? 'bg-emerald-400 cursor-not-allowed' : 'bg-[#008751] hover:bg-emerald-700'
+          }`}
+        >
+          {isLoading ? (lang === 'FR' ? 'Traitement en cours...' : lang === 'ZH' ? '处理中...' : 'Processing...') : t[lang].placeOrder}
+        </button>
+      </div>
+    )}
+</div>
+)}
           {activeTab === 'Orders' && (
             <div className="space-y-3 relative z-10 pointer-events-auto px-4 pt-4">
               <h2 className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-4 pl-0.5">{t[lang].history}</h2>
