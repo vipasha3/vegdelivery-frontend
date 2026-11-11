@@ -865,12 +865,12 @@ useEffect(() => {
                                       <div key={off.id} className="mb-2 text-[10px] text-emerald-700 border-t border-emerald-200 pt-2">
                                           <p className="text-[10px] text-emerald-600 font-bold">
                                             ✨ {lang === 'FR' ? off.name_fr : lang === 'ZH' ? off.name_zh : off.name_en}
-                                            <p className="opacity-90">
+                                            <div className="opacity-90">
                                                       {lang === 'FR' ? 'Réduction' : lang === 'ZH' ? '折扣' : 'Discount'}:
                                                       <span className="font-bold">{off.discount_percent}% OFF</span> |
                                                       {lang === 'FR' ? ' Code' : lang === 'ZH' ? ' 代码' : ' Code'}:
                                                       <span className="font-bold bg-white px-1 rounded mx-1">{off.code}</span>
-                                              </p>
+                                              </div>
                                               
                                             
                                             {off.type === 'welcome' && limit !== null && (
