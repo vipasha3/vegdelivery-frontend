@@ -859,34 +859,34 @@ useEffect(() => {
                                           </button>
                                         </div>
 
-                    
-                    {/* My Cart સેક્શનમાં આ બદલો */}
-                    {activeOffers.map((off) => (
-                      <div key={off.id} className="mb-2 text-[10px] text-emerald-700 border-t border-emerald-200 pt-2">
-                          <p className="text-[10px] text-emerald-600 font-bold">
-                            ✨ {lang === 'FR' ? off.name_fr : lang === 'ZH' ? off.name_zh : off.name_en}
-                            <p className="opacity-90">
-                                      {lang === 'FR' ? 'Réduction' : lang === 'ZH' ? '折扣' : 'Discount'}:
-                                      <span className="font-bold">{off.discount_percent}% OFF</span> |
-                                      {lang === 'FR' ? ' Code' : lang === 'ZH' ? ' 代码' : ' Code'}:
-                                      <span className="font-bold bg-white px-1 rounded mx-1">{off.code}</span>
-                              </p>
-                              
-                            
-                            {off.type === 'welcome' && limit !== null && (
-                              <span className="ml-1 opacity-80">
-                                {lang === 'FR' ? `(${Math.max(0, limit - usageCount)} restants)` : 
-                                lang === 'ZH' ? `(剩余 ${Math.max(0, limit - usageCount)} 次)` : 
-                                `(${Math.max(0, limit - usageCount)} uses left)`}
-                              </span>
-                            )}
-                          </p>
-                        </div>
-                        ))}
-                    </div>
-                 </details>
-             ) : null;
-          })()}
+                                    
+                                    {/* My Cart સેક્શનમાં આ બદલો */}
+                                    {activeOffers.map((off) => (
+                                      <div key={off.id} className="mb-2 text-[10px] text-emerald-700 border-t border-emerald-200 pt-2">
+                                          <p className="text-[10px] text-emerald-600 font-bold">
+                                            ✨ {lang === 'FR' ? off.name_fr : lang === 'ZH' ? off.name_zh : off.name_en}
+                                            <p className="opacity-90">
+                                                      {lang === 'FR' ? 'Réduction' : lang === 'ZH' ? '折扣' : 'Discount'}:
+                                                      <span className="font-bold">{off.discount_percent}% OFF</span> |
+                                                      {lang === 'FR' ? ' Code' : lang === 'ZH' ? ' 代码' : ' Code'}:
+                                                      <span className="font-bold bg-white px-1 rounded mx-1">{off.code}</span>
+                                              </p>
+                                              
+                                            
+                                            {off.type === 'welcome' && limit !== null && (
+                                              <span className="ml-1 opacity-80">
+                                                {lang === 'FR' ? `(${Math.max(0, limit - usageCount)} restants)` : 
+                                                lang === 'ZH' ? `(剩余 ${Math.max(0, limit - usageCount)} 次)` : 
+                                                `(${Math.max(0, limit - usageCount)} uses left)`}
+                                              </span>
+                                            )}
+                                          </p>
+                                        </div>
+                                        ))}
+                                    </div>
+                                 </details>
+                              ) : null;
+                          })()}
 
                 {Object.keys(cart || {}).length === 0 ? (
                   <p className="text-xs text-slate-400 italic text-center py-12">{t[lang].empty}</p>
@@ -990,30 +990,55 @@ useEffect(() => {
                     </div>
                   </div>
 
-                  {/* Payment Section */}
-                            <div className="bg-orange-50 p-2 rounded-lg">
-                              <p className="text-[9px] font-bold text-orange-800 mb-1">💳 ORANGE MONEY</p>
+                  {/* Payment Method Toggle Buttons */}
+                  <div className="mb-2 flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMethod && setPaymentMethod('ONLINE')}
+                      className={`flex-1 py-1.5 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${paymentMethod === 'ONLINE' ? 'bg-emerald-50 border-emerald-600 text-emerald-800' : 'bg-gray-50 text-slate-600 border-slate-200'}`}
+                    >
+                      💳 Orange Money
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMethod && setPaymentMethod('COD')}
+                      className={`flex-1 py-1.5 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${paymentMethod === 'COD' ? 'bg-emerald-50 border-emerald-600 text-emerald-800' : 'bg-gray-50 text-slate-600 border-slate-200'}`}
+                    >
+                      💵 Cash on Delivery
+                    </button>
+                  </div>
 
-                              {/* અહીં ભાષા મુજબ લખાણ સેટ કર્યું છે */}
-                              <p className="text-[10px] text-gray-600 mb-0.5">
-                                {lang === 'FR' ? 'Envoyer le paiement à :' : lang === 'ZH' ? '付款至 :' : 'Send payment to :'}
-                                <a href="tel:*144*1*224620721028#" className="ml-1 underline font-bold text-emerald-700">
-                                  +224 620 72 10 28
-                                </a>
-                              </p>
+                  {/* Payment Section Box */}
+                  {paymentMethod === 'ONLINE' ? (
+                    <div className="bg-orange-50 p-2 rounded-lg">
+                      <p className="text-[9px] font-bold text-orange-800 mb-1">💳 ORANGE MONEY</p>
 
-                              <p className="text-[9px] text-orange-600 mt-1 font-bold">
-                                ⚠️ {lang === 'FR' ? 'Attention : Les fausses IDs seront annulées.' : lang === 'ZH' ? '警告：虚假的交易ID将被取消订单。' : 'Warning: Orders with fake IDs will be automatically cancelled.'}
-                              </p>
+                      <p className="text-[10px] text-gray-600 mb-0.5">
+                        {lang === 'FR' ? 'Envoyer le paiement à :' : lang === 'ZH' ? '付款至 :' : 'Send payment to :'}
+                        <a href="tel:*144*1*224620721028#" className="ml-1 underline font-bold text-emerald-700">
+                          +224 620 72 10 28
+                        </a>
+                      </p>
 
-                              <input
-                                placeholder={lang === 'FR' ? 'ID de transaction' : lang === 'ZH' ? '交易 ID' : 'Enter Transaction ID'}
-                                className="w-full text-[10px] p-1 mt-1 border rounded"
-                                value={transactionId}
-                                onChange={(e) => setTransactionId(e.target.value)}
-                              />
-                            </div>
-                          </details>
+                      <p className="text-[9px] text-orange-600 mt-1 font-bold">
+                        ⚠️ {lang === 'FR' ? 'Attention : Les fausses IDs seront annulées.' : lang === 'ZH' ? '警告：虚假的交易ID将被取消订单。' : 'Warning: Orders with fake IDs will be automatically cancelled.'}
+                      </p>
+
+                      <input
+                        placeholder={lang === 'FR' ? 'ID de transaction' : lang === 'ZH' ? '交易 ID' : 'Enter Transaction ID'}
+                        className="w-full text-[10px] p-1 mt-1 border rounded"
+                        value={transactionId}
+                        onChange={(e) => setTransactionId(e.target.value)}
+                      />
+                    </div>
+                  ) : (
+                    <div className="bg-emerald-50 p-2 rounded-lg border border-emerald-100">
+                      <p className="text-[10px] font-bold text-emerald-800">
+                        💵 {lang === 'FR' ? 'Payez en espèces à la livraison.' : lang === 'ZH' ? '货到付款。' : 'Pay with cash upon delivery.'}
+                      </p>
+                    </div>
+                  )}
+                  </details>
 
 
                   <button 
