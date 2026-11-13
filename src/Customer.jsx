@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from './supabaseClient'; 
-
+import { AppConfig } from './config'; // 👈 આ ફાઈલ ઉપર ઇમ્પોર્ટ કરી લેવી
 
 export default function Customer() {
   const [lang, setLang] = useState(() => {
@@ -128,12 +128,12 @@ useEffect(() => {
           { data: cats },
           { data: prods },
           { data: settingsData },
-          { data: offersData } // કૂપન્સ પણ અહીંથી જ લાવો
+          { data: offersData } 
         ] = await Promise.all([
-          supabase.from('categories').select('*'),
-          supabase.from('products').select('*').eq('is_active', true),
-          supabase.from('settings').select('*'),
-          supabase.from('coupons').select('*').eq('status', 'Active')
+          supabase.from('categories').select('*').eq('country_code', AppConfig.countryCode),
+          supabase.from('products').select('*').eq('is_active', true).eq('country_code', AppConfig.countryCode),
+          supabase.from('settings').select('*').eq('country_code', AppConfig.countryCode),
+          supabase.from('coupons').select('*').eq('status', 'Active').eq('country_code', AppConfig.countryCode)
         ]);
 
         if (cats) setCategories(cats);
@@ -484,8 +484,8 @@ useEffect(() => {
           return;
       }
 
-      // ટ્રાન્ઝેક્શન ID વેલિડેશન
-      if (!transactionId || transactionId.trim() === "") {
+      // ટ્રાન્ઝેક્શન ID વેલિડેશન (જો COD ન હોય તો જ જરૂરી છે)
+      if (paymentMethod !== 'COD' && (!transactionId || transactionId.trim() === "")) {
         alert(lang === 'FR' ? "Veuillez entrer l'ID de transaction !" : "Please enter Transaction ID!");
         return;
       }
@@ -547,7 +547,8 @@ useEffect(() => {
               delivery_fee: deliveryFee,
               discount_amount: discount,
               discount_percent: appliedCoupon ? appliedCoupon.discount_percent : 0,
-              transaction_id: transactionId
+              transaction_id: transactionId,
+              country_code: AppConfig.countryCode
           };
 
           const { error: insertError } = await supabase.from('orders').insert([newOrder]);
