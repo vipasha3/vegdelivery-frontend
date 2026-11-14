@@ -2,7 +2,7 @@
 const hostname = window.location.hostname;
 const envCountry = import.meta.env.VITE_COUNTRY;
 
-let currentCountry = 'liberia'; // Default
+let currentCountry = 'guinea'; // Default
 
 // જો VITE_COUNTRY માં liberia આપેલું હોય અથવા URL માં liberia હોય
 if ((envCountry && envCountry.toLowerCase() === 'liberia') || hostname.includes('liberia')) {
